@@ -9,5 +9,5 @@ visible:    false
 Much of the recent success of deep learning in NLP has come through the use of *distributed text representations* - 
 
 <div style="text-align:center;">
-<img src="/assets/analogy-small.jpg" style="width:400px;" />
+<img src="/assets/unsupervised_pipeline.pdf" style="width:400px;" />
 </div>
