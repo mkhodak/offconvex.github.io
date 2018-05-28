@@ -36,6 +36,7 @@ For example, the sentences "This movie was great!" and "I enjoyed the film." sho
 Thus having a label for the first example tells us nothing about the second.
 
 ##Towards simple distributed representations
+
 To get similarity properties it seems appropriate to start with distributed word vectors.
 Indeed a series of papers have tried to construct text embeddings using embeddings of the constituent words.
 
@@ -57,6 +58,7 @@ In addition, they suggested taking out the component along the top singular dire
 This approach was inspired by earier work by [Wieting et al.](https://arxiv.org/abs/1511.08198), who started with the simple average embedding and improved it using a paraphrase dataset.
 
 ##Incorporating word-order
+
 As in the BonG approach of concatenating $n$-gram indicators on top of BoW, we can incorporate word-order in distributed embeddings by concatenating sums of $n$-gram embeddings on top of the simple sum-of-word embeddings vector.
 However, we want the $n$-gram embeddings themselves to also be compositional, as vectors for such features are not usually available.
 We take the simplest approach and represent each $n$-gram as the element-wise product of the embeddings of its words. 
@@ -73,6 +75,7 @@ When the word embeddings $v_w$ are trained using [GloVe](http://www.aclweb.org/a
 </div>
 
 ##Understanding what our embeddings encode using compressed sensing
+
 Re-expression of DisC as matrix transform of BonG.
 Compressed sensing implies recovery of BonG when A is RIP.
 Relevant to classification (compressed learning). State theorem.
