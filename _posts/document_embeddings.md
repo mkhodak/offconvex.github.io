@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      Unsupervised learning for representing the meaning of text
-date:       2015-12-01 8:00:00
+date:       2018-06-01 8:00:00
 author:     Sanjeev Arora, Mikhail Khodak, Nikunj Saunshi
 visible:    false
 ---
@@ -57,6 +57,12 @@ for some parameter $a$.
 In addition, they suggested taking out the component along the top singular direction of each batch of sentences.
 This approach was inspired by earier work by [Wieting et al.](https://arxiv.org/abs/1511.08198), who started with the simple average embedding and improved it using a paraphrase dataset.
 
+Both their paper and subsequent evaluations (see this nice [blog post](http://nlp.town/blog/sentence-similarity/) by Yves Peirsman) show that SIF embeddings work very well on sentence semantic similarity and relatedness tasks, outperforming deep learning approaches such as LSTM embeddings and deep averaging networks.
+In these evaluations pairs of sentence embeddings are assigned scores based on their inner product or a trained regression targeting human ratings.
+However, SIF embeddings do not end up improving performance strongly on sentiment classification tasks; 
+indeed taking out the top component hurts performance, while the weighting gives only a slight improvement.
+It seems that while word-level semantic content suffices for good similarity performance, sentiment analysis depends more on word-order, something that SIF doesn't capture.
+
 ##Incorporating word-order
 
 As in the BonG approach of concatenating $n$-gram indicators on top of BoW, we can incorporate word-order in distributed embeddings by concatenating sums of $n$-gram embeddings on top of the simple sum-of-word embeddings vector.
@@ -66,7 +72,7 @@ While standard training objectives favor additive rather than multiplicative com
 
 Our document embedding is then just a concatenation over $n$ of the sum-of-embeddings of all $n$-grams in the document:
 \[
-v_D=\begin{pmatrix}\sum\limits_{w\in\operatorname{words}(D)}v_w&\cdots&\sum\limits_{g\in n\operatorname{-grams}(D)}v_g\end{pmatrix}
+v_D=\begin{pmatrix}\sum\limits_{w\in\operatorname{words}(D)}v_w&\cdots&\sum\limits_{g\in\operatorname{n-grams}(D)}v_g\end{pmatrix}
 \]
 When the word embeddings $v_w$ are trained using [GloVe](http://www.aclweb.org/anthology/D14-1162) on a large corpus of Amazon reviews, this document representation compares quite well to both BonG approaches and LSTM methods on sentiment analysis.
 
@@ -74,18 +80,13 @@ When the word embeddings $v_w$ are trained using [GloVe](http://www.aclweb.org/a
 <img src="/assets/clfperf_sst_imdb.svg" style="width:400px;" />
 </div>
 
-##Understanding what our embeddings encode using compressed sensing
 
-Re-expression of DisC as matrix transform of BonG.
-Compressed sensing implies recovery of BonG when A is RIP.
-Relevant to classification (compressed learning). State theorem.
+##Looking forward
+The success of our represenation on these tasks demonstrates how simple methods using only local word-order information are still competitive with deep learning approaches.
+Indeed, embedding documents using summations of n-gram embeddings has also been shown to be effective by more recent work such as [Sent2Vec](https://arxiv.org/abs/1703.02507), who learn unigram and bigram vectors specifically for sentence representation, and also in our [upcoming paper at ACL 2018](https://arxiv.org/abs/1805.05388) (joint with Yingyu Liang, Tengyu Ma, and Brandon Stewart).
+Unlike in these papers, where the n-gram vectors are the results of a learning procedure, our embeddings can be computed compositionally using just word embeddings.
 
-A is RIP for Rademacher vectors (BOS, see paper for full proof).
-State main theorem (for DisC, not LSTM).
-Mention connection to LSTM.
-
-<div style="text-align:center;">
-<img src="/assets/imdbperf_uni_bi.svg" style="width:400px;" />
-</div>
-
-But what about pretrained word embeddings?
+In this post we have introduced a few simple ways of representing documents using word embeddings alone; this leaves open a theoretical understanding of their performance on downstream tasks.
+In a follow-up post we will show how ideas from sparse recovery can be used to understand what these n-gram embeddings encode in the case of random word vectors.
+We will see that these compressed sensing properties also matter for downstream tasks, specifically linear classification.
+Finally, we will examine why these results matter in the case of pretrained word embeddings as well.
