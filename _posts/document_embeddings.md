@@ -63,7 +63,7 @@ This approach was inspired by earlier work by [Wieting et al.](https://arxiv.org
 Both their paper and subsequent evaluations (see this nice [blog post](http://nlp.town/blog/sentence-similarity/) by Yves Peirsman) show that SIF embeddings work very well on sentence semantic similarity and relatedness tasks, outperforming deep learning approaches such as LSTM embeddings and deep averaging networks.
 In these evaluations pairs of sentence embeddings are assigned scores based on their inner product or a trained regression targeting human ratings.
 However, SIF embeddings do not end up improving performance strongly on sentiment classification tasks; 
-indeed taking out the top component hurts performance (as one would expect), while the weighting gives only a slight improvement.
+indeed taking out the top component hurts performance, while the weighting gives only a slight improvement.
 It seems that while word-level semantic content suffices for good similarity performance, sentiment analysis depends more on word-order, something that SIF doesn't capture.
 
 ##Incorporating word-order
