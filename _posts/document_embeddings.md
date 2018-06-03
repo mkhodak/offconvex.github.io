@@ -9,7 +9,7 @@ visible:    false
 Much of the recent success of deep learning in NLP has come through the use of *distributed text representations* - embeddings trained to capture the "meaning" of text with moderate dimensionality. 
 In the unsupervised setting, models are trained on large text corpora to produce these vectors given any input string; 
 these are then passed to downstream NLP systems solving standard tasks such as document classification. 
-This pipeline is very different from an end-to-end differentiable system such as questiona-answering, which is trained for a single task.
+This pipeline is very different from an end-to-end differentiable system such as question-answering, which is trained for a single task.
 Since no labels are provided, these methods need to encode text in such a way that its "meaning" can be extracted efficiently for use in supervised tasks with limited labeled data.
 
 <div style="text-align:center;">
@@ -27,8 +27,11 @@ A perhaps surprising member in this story is compressed sensing (also called spa
 
 ##The powers and limitations of sparse text representations
 
-Before discussing distributed embeddings, let's briefly review an alternative: the simple idea to retain $n$-gram information.
-The result is the bag-of-$n$-grams (BonG) featurization, which in the unigram case reduces to the familiar bag-of-words (BoW).
+Before discussing distributed embeddings, let's briefly review some popular sparse embedding alternatives.
+The bag-of-words (BoW) representation of a document is a sparse high-dimensional vector storing the number of occurrences of a word in the document, for every word in the vocabulary.
+The obvious pitfall of this representation is that it completely ignores word order; the sentences "man eats dog" and "dog eats man" have the same BoW representations even though they have different meanings.
+This issue is alleviated by using $n$-grams to capture local order information. $n$-grams are $n$-tuples of consecutive words, e.g. bigrams (2-grams) in "man eats dog" are (man, eats) and (eats, dogs).
+The bag-of-$n$-grams (BonG) featurization counts the occurrences of $p$-grams in the document for $p\le n$.
 This approach is often the first application of SVM taught in intro ML classes, and with good reason: as [Wang & Manning](https://www.aclweb.org/anthology/P12-2018) remind us, it remains a very strong baseline for document classification.
 
 However, $n$-grams can fail to capture similarity in ways that matter when only a few labeled examples are available.
@@ -55,12 +58,12 @@ v_D=\sum\limits_{w\in\operatorname{words}(D)}\frac{a}{a+\operatorname{frequency}
 \]
 for some parameter $a$.
 In addition, they suggested taking out the component along the top singular direction of each batch of sentences.
-This approach was inspired by earier work by [Wieting et al.](https://arxiv.org/abs/1511.08198), who started with the simple average embedding and improved it using a paraphrase dataset.
+This approach was inspired by earlier work by [Wieting et al.](https://arxiv.org/abs/1511.08198), who started with the simple average embedding and improved it using a paraphrase dataset.
 
 Both their paper and subsequent evaluations (see this nice [blog post](http://nlp.town/blog/sentence-similarity/) by Yves Peirsman) show that SIF embeddings work very well on sentence semantic similarity and relatedness tasks, outperforming deep learning approaches such as LSTM embeddings and deep averaging networks.
 In these evaluations pairs of sentence embeddings are assigned scores based on their inner product or a trained regression targeting human ratings.
 However, SIF embeddings do not end up improving performance strongly on sentiment classification tasks; 
-indeed taking out the top component hurts performance, while the weighting gives only a slight improvement.
+indeed taking out the top component hurts performance (as one would expect), while the weighting gives only a slight improvement.
 It seems that while word-level semantic content suffices for good similarity performance, sentiment analysis depends more on word-order, something that SIF doesn't capture.
 
 ##Incorporating word-order
