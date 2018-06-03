@@ -1,9 +1,9 @@
 ---
-layout:     post
-title:      Unsupervised learning for representing the meaning of text
-date:       2018-06-01 8:00:00
-author:     Sanjeev Arora, Mikhail Khodak, Nikunj Saunshi
-visible:    false
+layout: post
+title: Unsupervised learning for representing the meaning of text
+date: 2018-06-01 8:00:00
+author: Sanjeev Arora, Mikhail Khodak, Nikunj Saunshi
+visible: false
 ---
 
 Much of the recent success of deep learning in NLP has come through the use of *distributed text representations* - embeddings trained to capture the "meaning" of text with moderate dimensionality. 
@@ -25,7 +25,7 @@ Sanjeev discussed their resulting properties in two [previous](http://www.offcon
 This post is based on our [ICLR 2018 paper](https://openreview.net/forum?id=B1e5ef-C-&noteId=B1e5ef-C-) (joint with Kiran Vodrahalli) about elementary, interpretable methods for defining and computing text representations that has both provable guarantees and is competitive with state-of-the-art deep learning methods. 
 A perhaps surprising member in this story is compressed sensing (also called sparse recovery).
 
-##The powers and limitations of sparse text representations
+## The powers and limitations of sparse text representations
 
 Before discussing distributed embeddings, let's briefly review some popular sparse embedding alternatives.
 The bag-of-words (BoW) representation of a document is a sparse high-dimensional vector storing the number of occurrences of a word in the document, for every word in the vocabulary.
@@ -38,7 +38,7 @@ However, $n$-grams can fail to capture similarity in ways that matter when only 
 For example, the sentences "This movie was great!" and "I enjoyed the film." should mean the same thing to the ideal sentiment classifier but share no $n$-grams of any order.
 Thus having a label for the first example tells us nothing about the second.
 
-##Towards simple distributed representations
+## Towards simple distributed representations
 
 To get similarity properties it seems appropriate to start with distributed word vectors.
 Indeed a series of papers have tried to construct text embeddings using embeddings of the constituent words.
@@ -66,7 +66,7 @@ However, SIF embeddings do not end up improving performance strongly on sentimen
 indeed taking out the top component hurts performance, while the weighting gives only a slight improvement.
 It seems that while word-level semantic content suffices for good similarity performance, sentiment analysis depends more on word-order, something that SIF doesn't capture.
 
-##Incorporating word-order
+## Incorporating word-order
 
 As in the BonG approach of concatenating $n$-gram indicators on top of BoW, we can incorporate word-order in distributed embeddings by concatenating sums of $n$-gram embeddings on top of the simple sum-of-word embeddings vector.
 However, we want the $n$-gram embeddings themselves to also be compositional, as vectors for such features are not usually available.
@@ -84,7 +84,7 @@ When the word embeddings $v_w$ are trained using [GloVe](http://www.aclweb.org/a
 </div>
 
 
-##Looking forward
+## Looking forward
 The success of our represenation on these tasks demonstrates how simple methods using only local word-order information are still competitive with deep learning approaches.
 Indeed, embedding documents using summations of n-gram embeddings has also been shown to be effective by more recent work such as [Sent2Vec](https://arxiv.org/abs/1703.02507), who learn unigram and bigram vectors specifically for sentence representation, and also in our [upcoming paper at ACL 2018](https://arxiv.org/abs/1805.05388) (joint with Yingyu Liang, Tengyu Ma, and Brandon Stewart).
 Unlike in these papers, where the n-gram vectors are the results of a learning procedure, our embeddings can be computed compositionally using just word embeddings.
