@@ -31,7 +31,7 @@ Before discussing distributed embeddings, let's briefly review some popular spar
 The bag-of-words (BoW) representation of a document is a sparse high-dimensional vector storing the number of occurrences of a word in the document, for every word in the vocabulary.
 The obvious pitfall of this representation is that it completely ignores word order; the sentences "man eats dog" and "dog eats man" have the same BoW representations even though they have different meanings.
 This issue is alleviated by using $n$-grams to capture local order information. $n$-grams are $n$-tuples of consecutive words, e.g. bigrams (2-grams) in "man eats dog" are (man, eats) and (eats, dogs).
-The bag-of-$n$-grams (BonG) featurization counts the occurrences of $p$-grams in the document for $p\le n$.
+The bag-of-$n$-grams (BonG) featurization counts the occurrences of $p$-grams in the document for all $p\le n$.
 This approach is often the first application of SVM taught in intro ML classes, and with good reason: as [Wang & Manning](https://www.aclweb.org/anthology/P12-2018) remind us, it remains a very strong baseline for document classification.
 
 However, $n$-grams can fail to capture similarity in ways that matter when only a few labeled examples are available.
