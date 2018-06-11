@@ -1,10 +1,13 @@
 ---
 layout:     post
-title:      Unsupervised learning for representing the meaning of text
-date:       2018-06-10 8:00:00
+title:      Understanding text embeddings using compressed sensing
+date:       2018-07-01 8:00:00
 author:     Sanjeev Arora, Mikhail Khodak, Nikunj Saunshi
 visible:    false
 ---
+
+In a recent [post](LINK), Sanjeev discussed some ideas behind unsupervised text embeddings, whose goal is to use a large text corpus to learn representations of documents that can be used to perform well on downstream tasks using only a few labeled examples.
+
 
 ##Understanding what our embeddings encode using compressed sensing
 
