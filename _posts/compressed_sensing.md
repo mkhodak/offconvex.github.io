@@ -16,15 +16,36 @@ The bag-of-words (BoW) representation of a document $x_D^{BoW}$ can be written a
 x_D^{BoW} = \sum\limits_{w\in D} e_w$
 \]
 where $e_w$ is the $V$ dimensional one-hot embedding for the word $w$, i.e. a vector with 1 in the coordinate corresponding to $w$ and 0 at all other coordinates.
-So the BoW representation of a document is the sum of certain words vectors of the words in the document, where the word vectors are all orthogonal ($e_w^T e_{w'} = 0).
+So the BoW representation of a document is the sum of certain words vectors of the words in the document, where the word vectors are all orthogonal ($e_w^T e_{w'} = 0$).
 The orthogonality of these word vectors lets us exactly recover the words of a document given the BoW representation.
 Here is a crucial observation -- since text documents typically have very few distinct words (much lesser than $V$), one could hope to use lower dimensionsal word vectors which are "almost orthogonal" and still be able to uniquely recover the words of a document.
 So if we had word vectors $v_w \in \mathbb{R}^d$ which satisfied this almost orthogonality property, then the representation $x_D = \sum\limits_{w\in D} v_w$ would encode precisely the same information as $x_D^{BoW}$.
 Note that $x_D = Ax_D^{BoW}$, where $A$ is a $d\times V$ matrix whose columns correspond to the vectors $v_w$s, i.e. $x_D$ is a linear compression of $x_D^{BoW}$.
 This is where compressed sensing comes into the picture - compressed sensing deals with finding conditions on the matrix A such that given $Ax$, one can uniquely recover a sparse high-dimensional vector $x$ (cite someone here).
-Note, that being able to recover the BoW information doesn't directly imply having the same performance as BoW on linear classification (in fact, this is not true always).
+Note that being able to recover the BoW information doesn't directly imply having the same performance as BoW on linear classification (in fact, this is not always true).
 However by building upon the work of Calderbank et al., we prove that in the case of random word embeddings, the compressed sensing condition which implies optimal recovery also implies good performance on linear classification.
 Furthermore, extending these ideas to $n$-grams, we also show that our DisC embeddings described in the previous post (link here) can do as well as Bag-of-$n$-Gram (BonG) representations.
+
+## Learning under compression
+
+Let's first understand conditions on the linear compression which ensure that the compressed vectors do as well as uncompressed ones on linear classification.
+One such condition is the **Restricted Isometry Property** (RIP) introduced by Candes and Tao in their seminal paper which discussed efficient recovery of sparse signals with near optimal measurements.
+>**Restricted Isometry Property (RIP)**: $A\in\mathbb{R}^{d\times n}$ satisfies $(k,\epsilon)$-RIP if $(1-\epsilon)\|x\|_2 \le \|Ax\|_2 \le (1+\epsilon)\|x\|_2$, for all $k$-sparse $x\in\mathbb{R}^n$
+In other words, every set of $k$ columns of $A$ must form a nearly orthogonal matrix. This is similar to the idea of "almost orthogonality" that we eluded to above.
+
+Candes and Tao discussed RIP in the context of sparse recovery using linear compression and it has been widely used in the compressed sensing literature since then. But does it say anything about linear classification?
+The following theorem (extension of a theorem by Calderbank et al.) shows that RIP indeed implies good classification performance of the compressed vectors
+>Theorem: Suppose $A\in\mathbb{R}^{d\times n}$ satisfies $(2k,\epsilon)$-RIP and let $S = \{({\bf x}_i, y_i)\}_{i=1}^{m}$ be $m$ samples drawn i.i.d. from a distribution $\mathcal{D}$ over $k$-sparse vectors and binary labels. Let $\ell$ be a convex and Lipschitz loss function and $w_0$ be the minimizer of $\ell$ on the distribution $\mathcal{D}$, then with high probability the classifier $\hat w_A$ which is the minimizer of the $\ell_2$ regularized empirical loss function over the compressed samples $\{(A{\bf x}_i, y_i)\}_{i=1}^{m}$ satisfies
+>$$\ell_D(\hat w_A) \le \ell_D(w_0) + \mathcal{O}\left(\sqrt{\epsilon + \frac{1}{m}\log\frac{1}{\delta}}\right)$$
+In simple words this theorem says that if $A$ satisfies a certain RIP condition then the classifier learnt on the compressed samples $\{Ax_i\}$ will do as well as the best classifier on the uncompressed samples $\{x_i\}$, upto an additive error of $\sqrt{\epsilon}$ which depends on the isometry constant of $A$.
+Note that with very large number of samples one cannot hope to do better than the original vectors on linear classfication by using only a linear compression; since for every classifier $w_A$ in the compressed domain, the classifier $A^Tw_A$ in the original domain has the same loss as $w_A$ in the compressed domain.
+The theorem shows that RIP matrices ensure that compressed vectors are not too far away from the performance of the uncompressed vectors.
+
+## Proving good performance of DisC
+(Sketch)
+The matrix of random word embeddings satisfies $(k,\epsilon)$-RIP if $d=\Omega\left(\frac{k}{\epsilon^2}\right)$. By the above theorem we can conclude simple sum of word embeddings does almost as well as bag-of-words representation on linear classification and the additive error goes to 0 and the dimension $d$ of word embeddings goes to infinity.
+
+DisC embeddings can be seen as linear compressions of BonGs. This linear transformation can be shown to satisfy RIP using the theory of bounded-orthonormal-systems. (1-2 lines description here)
 
 ## Understanding what our embeddings encode using compressed sensing
 
