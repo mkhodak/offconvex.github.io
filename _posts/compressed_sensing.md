@@ -8,7 +8,7 @@ visible:    false
 
 In a recent [post](LINK), Sanjeev discussed some ideas behind unsupervised text embeddings, whose goal is to use a large text corpus to learn representations of documents that can be used to perform well on downstream tasks using only a few labeled examples.
 
-##Why should low-dimensional distributed representations do well?
+## Why should low-dimensional distributed representations do well?
 
 To understand the good performance of distributed representations, we begin by taking a closer look at the sparse counterparts.
 The bag-of-words (BoW) representation of a document $x_D^{BoW}$ can be written as
@@ -26,7 +26,7 @@ Note, that being able to recover the BoW information doesn't directly imply havi
 However by building upon the work of Calderbank et al., we prove that in the case of random word embeddings, the compressed sensing condition which implies optimal recovery also implies good performance on linear classification.
 Furthermore, extending these ideas to $n$-grams, we also show that our DisC embeddings described in the previous post (link here) can do as well as Bag-of-$n$-Gram (BonG) representations.
 
-##Understanding what our embeddings encode using compressed sensing
+## Understanding what our embeddings encode using compressed sensing
 
 Re-expression of DisC as matrix transform of BonG.
 Compressed sensing implies recovery of BonG when A is RIP.
