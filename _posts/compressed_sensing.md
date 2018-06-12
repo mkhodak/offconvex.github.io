@@ -6,7 +6,10 @@ author:     Sanjeev Arora, Mikhail Khodak, Nikunj Saunshi
 visible:    false
 ---
 
-In a recent [post](LINK), Sanjeev discussed some ideas behind unsupervised text embeddings, whose goal is to use a large text corpus to learn representations of documents that can be used to perform well on downstream tasks using only a few labeled examples.
+In a recent [post](LINK), Sanjeev discussed some ideas behind unsupervised text embeddings, whose goal is to use a large text corpus to learn representations of documents that can be used to perform well on downstream tasks using only a few labeled examples. 
+Although deep learning approaches are popular in this area, it turns out that a simple weighted combination of word embeddings combined with some mild denoising ([the SIF embedding](https://openreview.net/pdf?id=SyK00v5xx)) outperforms many such methods, including [Skipthought](https://arxiv.org/pdf/1506.06726.pdf), on sentence semantic similarity tasks. 
+In this post we will discuss our recent [ICLR'18 paper](https://openreview.net/pdf?id=B1e5ef-C-) with Kiran Vodrahalli, where we target a similar goal -- simple, compositional document embeddings -- in the context of text classification. 
+Our representations achieve performance that is competitive with LSTM-based methods, both provably for the case of random word embeddings and empirically for the case of pretrained (GloVe) word vectors.
 
 ## Why should low-dimensional distributed representations do well?
 
@@ -35,8 +38,9 @@ In other words, every set of $k$ columns of $A$ must form a nearly orthogonal ma
 
 Candes and Tao discussed RIP in the context of sparse recovery using linear compression and it has been widely used in the compressed sensing literature since then. But does it say anything about linear classification?
 The following theorem (extension of a theorem by Calderbank et al.) shows that RIP indeed implies good classification performance of the compressed vectors
->Theorem: Suppose $A\in\mathbb{R}^{d\times n}$ satisfies $(2k,\epsilon)$-RIP and let $S = \{({\bf x}_i, y_i)\}_{i=1}^{m}$ be $m$ samples drawn i.i.d. from a distribution $\mathcal{D}$ over $k$-sparse vectors and binary labels. Let $\ell$ be a convex and Lipschitz loss function and $w_0$ be the minimizer of $\ell$ on the distribution $\mathcal{D}$, then with high probability the classifier $\hat w_A$ which is the minimizer of the $\ell_2$ regularized empirical loss function over the compressed samples $\{(A{\bf x}_i, y_i)\}_{i=1}^{m}$ satisfies
+>**Theorem**: Suppose $A\in\mathbb{R}^{d\times n}$ satisfies $(2k,\epsilon)$-RIP and let $S = \{({\bf x}_i, y_i)\}_{i=1}^{m}$ be $m$ samples drawn i.i.d. from a distribution $\mathcal{D}$ over $k$-sparse vectors and binary labels. Let $\ell$ be a convex and Lipschitz loss function and $w_0$ be the minimizer of $\ell$ on the distribution $\mathcal{D}$, then with high probability the classifier $\hat w_A$ which is the minimizer of the $\ell_2$ regularized empirical loss function over the compressed samples $\{(A{\bf x}_i, y_i)\}_{i=1}^{m}$ satisfies
 >$$\ell_D(\hat w_A) \le \ell_D(w_0) + \mathcal{O}\left(\sqrt{\epsilon + \frac{1}{m}\log\frac{1}{\delta}}\right)$$
+
 In simple words this theorem says that if $A$ satisfies a certain RIP condition then the classifier learnt on the compressed samples $\{Ax_i\}$ will do as well as the best classifier on the uncompressed samples $\{x_i\}$, upto an additive error of $\sqrt{\epsilon}$ which depends on the isometry constant of $A$.
 Note that with very large number of samples one cannot hope to do better than the original vectors on linear classfication by using only a linear compression; since for every classifier $w_A$ in the compressed domain, the classifier $A^Tw_A$ in the original domain has the same loss as $w_A$ in the compressed domain.
 The theorem shows that RIP matrices ensure that compressed vectors are not too far away from the performance of the uncompressed vectors.
