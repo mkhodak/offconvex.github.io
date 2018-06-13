@@ -5,6 +5,9 @@ date:       2018-07-01 8:00:00
 author:     Sanjeev Arora, Mikhail Khodak, Nikunj Saunshi
 visible:    false
 ---
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
 
 In a recent [post](LINK), Sanjeev discussed some ideas behind unsupervised text embeddings, whose goal is to use a large text corpus to learn representations of documents that can be used to perform well on downstream tasks using only a few labeled examples. 
 Although deep learning approaches are popular in this area, it turns out that a simple weighted combination of word embeddings combined with some mild denoising ([the SIF embedding](https://openreview.net/pdf?id=SyK00v5xx)) outperforms many such methods, including [Skipthought](https://arxiv.org/pdf/1506.06726.pdf), on sentence semantic similarity tasks. 
@@ -70,13 +73,15 @@ Let's first consider the most well-known recovery condition on the compression m
 In other words, every set of $k$ columns of $A$ must form a nearly orthogonal matrix.
 This is a mathematical formulation of the "almost orthogonality" property that we alluded to earlier.
 
-RIP provably allows stable recovery using sub-linear (and near optimal) reocvery of a sparse signal from its linear compression, a result which initiated compressed sensing as a field.
+RIP provably allows stable and efficient recovery of a sparse signal from its linear compression, a result which initiated compressed sensing as a field.
 But does RIP say anything about linear classification in the compressed domain ("compressed learning")?
 The following theorem (extension of a theorem by Calderbank et al.) shows that RIP indeed implies good classification performance of the compressed vectors.
 
 >**Theorem**: Suppose $A\in\mathbb{R}^{d\times n}$ satisfies $(2k,\varepsilon)$-RIP and let $S = \{({\bf x}_i, y_i)\}_{i=1}^{m}$ be $m$ samples drawn i.i.d. from a distribution $\mathcal{D}$ over $k$-sparse vectors and binary labels.
 Let $\ell$ be a convex Lipschitz loss function and $w_{BonG}$ be the minimizer of $\ell$ on the distribution $\mathcal{D}$, then with high probability the classifier $\hat w_A$ which minimizes the $\ell_2$ regularized empirical loss over compressed samples $\{(A{\bf x}_i, y_i)\}_{i=1}^{m}$ satisfies
-$$\ell_{\mathcal{D}}(\hat w_A) \le \ell_{\mathcal{D}}(w_{BonG}) + \mathcal{O}\left(\sqrt{\varepsilon + \frac{1}{m}\log\frac{1}{\delta}}\right)$$
+\[
+\ell_{\mathcal{D}}(\hat w_A) \le \ell_{\mathcal{D}}(w_{BonG}) + \mathcal{O}\left(\sqrt{\varepsilon + \frac{1}{m}\log\frac{1}{\delta}}\right)
+\]
 
 In words this theorem says that if $A$ satisfies a certain RIP condition then the classifier learnt on the compressed samples $\{Ax_i\}$ will do as well as the best classifier of the uncompressed samples $\{x_i\}$, up to an additive error of $\mathcal{O}(\sqrt{\varepsilon})$ which depends on the isometry constant of $A$.
 Note that for every classifier $w_A$ in the compressed domain, the classifier $A^Tw_A$ in the original domain has the same loss as $w_A$ in the compressed domain.
@@ -86,7 +91,7 @@ The theorem shows that RIP matrices ensure that compressed vectors are not too f
 ## Proving good performance of DisC
 
 It is easy to see that DisC embeddings $v_{DisC}=Av_{BonG}$ are linear compressions of BonGs, where $A$ is the matrix of $n$-gram vectors.
-Thus for the unigram case, if we assign each word a $d$-dimensional vector of i.i.d. Rademacher variables (normalized by $\frac{1}{\sqrt{d}}$) then each entry of $A\in\mathbb{R}^{d\times V}$$ will be an independent Rademacher random variable, which is known to satisfy $(k,\varepsilon)$-RIP w.h.p. if $d=\tilde\Omega\left(\frac{k}{\varepsilon^2}\right)$ (this follows from concentration of sums of independent random variables).
+Thus for the unigram case, if we assign each word a $d$-dimensional vector of i.i.d. Rademacher variables (normalized by $\frac{1}{\sqrt{d}}$) then each entry of $A\in\mathbb{R}^{d\times V}$ will be an independent Rademacher random variable, which is known to satisfy $(k,\varepsilon)$-RIP w.h.p. if $d=\tilde\Omega\left(\frac{k}{\varepsilon^2}\right)$ (this follows from concentration of sums of independent random variables).
 By applying the above theorem we can conclude that unigram DisC embeddings with random word vectors do almost as well as BoW on linear classification.
 The additive error decreases as the dimensionality $d$ of the word embeddings increase and asymptotically goes to 0 as $d$ goes to infinity.
 
@@ -94,7 +99,9 @@ For the $n$-gram case, showing that the matrix transforming BonG vectors to DisC
 This is because the columns of A (corresponding to $n$-grams embeddings) are no longer independent; columns of $n$-grams that share words will be dependent.
 We can get around this by using the [theory of bounded orthonormal systems](http://www.cis.pku.edu.cn/faculty/vision/zlin/A%20Mathematical%20Introduction%20to%20Compressive%20Sensing.pdf) to show that the matrix of $n$-gram embeddings also satisfies the required RIP condition (see paper for full proof).
 Combining these results we can show that starting with $d=\tilde\Omega\left(\frac{k}{\varepsilon^2}\right)$ dimensional random word embeddings, the classifier $w_{DisC}$ trained on DisC representations will satisfy
-$$\ell_{\mathcal{D}}(w_{DisC}) \le \ell_{\mathcal{D}}(w_{BonG}) + \mathcal{O}\left(\sqrt{\varepsilon}\right)$$
+\[
+\ell_{\mathcal{D}}(w_{DisC}) \le \ell_{\mathcal{D}}(w_{BonG}) + \mathcal{O}\left(\sqrt{\varepsilon}\right)
+\]
 
 Additionally it can be easily shown that DisC embeddings are **computable by low-memory LSTMs**.
 So the above results also show that, if initialized correctly, LSTMs are guaranteed to do as well as BonG representations, a result that extensive empirical study has been unable to establish.
@@ -126,7 +133,7 @@ An intuitive explanation for these observations is that since pretrained embeddi
 To make this intuition a bit more formal, we use a result of [Donoho & Tanner](http://www.pnas.org/content/pnas/102/27/9446.full.pdf) to prove that words in a document can be recovered from the sum of word vectors if and only if there is a hyperplane containing the vectors for words in the document with the vectors for all other words on one side of it.
 Since co-occurring words will have similar embeddings, it would make it easier to find such a hyperplane separating words in a text document from the rest of the words and hence would ensure good recovery.
 However, this still does not provably explain good recovery using pretrained embeddings, and even such a result would not necessarily imply good performance on classification tasks, as current compressed learning results depend on RIP and not sparse recovery.
-Perhaps assuming a generative model for text, like the RankWalk model discussed in [an earlier post](https://www.offconvex.org/2016/02/14/word-embeddings-2/), could help us formally prove these statements. 
+Perhaps assuming a generative model for text, like the RandWalk model discussed in [an earlier post](https://www.offconvex.org/2016/02/14/word-embeddings-2/), could help us formally prove these statements.
 
 ## Discussion
 
