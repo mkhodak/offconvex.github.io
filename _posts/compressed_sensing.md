@@ -127,3 +127,11 @@ To make this intuition a bit more formal, we use a result of [Donoho & Tanner](h
 Since co-occurring words will have similar embeddings, it would make it easier to find such a hyperplane separating words in a text document from the rest of the words and hence would ensure good recovery.
 However, this still does not provably explain good recovery using pretrained embeddings, and even such a result would not necessarily imply good performance on classification tasks, as current compressed learning results depend on RIP and not sparse recovery.
 Perhaps assuming a generative model for text, like the RankWalk model discussed in [an earlier post](https://www.offconvex.org/2016/02/14/word-embeddings-2/), could help us formally prove these statements. 
+
+## Discussion
+
+Our empirical results on text classification using simple compositions of pretrained word embeddings are further evidence that such simple representation schemes can still compete with more opaque deep learning approaches.
+Indeed, a new [NAACL'18 paper](https://arxiv.org/abs/1703.02507) of Pagliardini, Gupta, & Jaggi propose training unigram and bigram embeddings specifically to add them together to make document representations and achieve good results.
+We also give an information-theoretic account of these text embeddings using the theory of compressed sensing, highlighting its connection to downstream task performance, and discover a new property of pretrained word embeddings.
+While our compositional $n$-gram embeddings don't achieve similar results on sparse recovery, better-trained $n$-gram vectors (such as those in our upcoming [ACL'18 paper](https://arxiv.org/abs/1805.05388) with Yingyu Liang, Tengyu Ma, & Brandon Stewart) might be more likely to exhibit such properties.
+Perhaps not-incindentally, such embeddings also lead to better results for text classification.
