@@ -62,14 +62,14 @@ Furthermore by extending these ideas to $n$-gram case, we also show that our Dis
 ## Learning under compression
 
 Let's first understand conditions on the linear compression matrix $A$ which ensure that the compressed vectors do as well as uncompressed ones on linear classification.
-One such condition is the **Restricted Isometry Property** (RIP) introduced by Candes and Tao in their seminal paper which discussed efficient recovery of sparse signals with near optimal measurements.
+One such condition is the **Restricted Isometry Property** (RIP) introduced by [Candes and Tao](https://statweb.stanford.edu/~candes/papers/DecodingLP.pdf) in their seminal paper which discussed efficient recovery of sparse signals with near optimal measurements.
 
 >**Restricted Isometry Property (RIP)**: $A\in\mathbb{R}^{d\times n}$ satisfies $(k,\epsilon)$-RIP if $(1-\epsilon)\|x\|_2 \le \|Ax\|_2 \le (1+\epsilon)\|x\|_2$, for all $k$-sparse $x\in\mathbb{R}^n$
 
 In other words, every set of $k$ columns of $A$ must form a nearly orthogonal matrix.
 This is a mathematical formulation of the "almost orthogonality" property that we eluded to earlier.
 
-Candes and Tao discussed RIP in the context of sparse signal recovery from linear compressions and it has been widely used and studied in the compressed sensing literature since then.
+[Candes and Tao](https://statweb.stanford.edu/~candes/papers/DecodingLP.pdf) discussed RIP in the context of sparse signal recovery from linear compressions and it has been widely used and studied in the compressed sensing literature since then.
 But does it say anything about linear classification?
 The following theorem (extension of a theorem by [Calderbank et al.](https://pdfs.semanticscholar.org/627c/14fe9097d459b8fd47e8a901694198be9d5d.pdf)) shows that RIP indeed implies good classification performance of the compressed vectors
 
@@ -100,6 +100,14 @@ $$\ell_{\mathcal{D}}(w_{DisC}) \le \ell_{\mathcal{D}}(w_{BonG}) + \mathcal{O}\le
 Additionally it can be easily shown that DisC embeddings are **computable by low-memory LSTMs**.
 So the above results also proves that if initialized correctly, LSTMs are guaranteed to do as well as BonG representations, a result that extensive empirical study has been unable to establish.
 
+<div style="text-align:center;">
+<img src="/assets/imdbperf_uni_bi.svg" style="width:400px;" />
+</div>
+
+We empirically tested the effect of dimensionality by measuring performance of DisC on the IMDb sentiment classification.
+As evident in the figure above, the accuracy of DisC using random word embeddings converges to that of BonGs as dimensionality increases.
+Interestingly we also find that DisC using pretrained word embeddings like GloVe converges to BonG performance at much smaller dimensions.
+
 ## Pretrained word embeddings
 Though the above theoretical analysis uses random word embeddings, in practice word embeddings like GloVe and word2vec that are trained on a large text corpus are often used for language modeling and text classification tasks as they generally outperform random word embeddings.
 The same analysis, however, cannot be be applied to pretrained embeddings, since the matrix of pretrained embeddings does not satisfy the necessary RIP conditions.
@@ -115,11 +123,7 @@ We try to recover words in text documents from the sum of word vectors for both 
 Suprisingly, we found that pretrained word embeddings recover words more efficiently than random embeddings at the same dimensionality, suggesting that pretrained embeddings are more efficient at encoding text documents.
 However random embeddings are unsurprisingly better at recovering words from a random word salad.
 An intuitive explanation for these observations is that since pretrained embeddings were trained on a large text corpus, they are specialized, in some sense, to do well only on real text documents rather than a random collection of words.
-To make this intuition a bit more formal, we appeal to a theorem by Donoho and Tanner and prove that words in a document can be recovered from the sum of word vectors if and only if there is a hyperplane containing the vectors for words in the document with the vectors for all other words on one side of it.
+To make this intuition a bit more formal, we appeal to a theorem by [Donoho and Tanner](http://www.pnas.org/content/pnas/102/27/9446.full.pdf) and prove that words in a document can be recovered from the sum of word vectors if and only if there is a hyperplane containing the vectors for words in the document with the vectors for all other words on one side of it.
 Since co-occurring words will have similar embeddings, it would make it easier to find such a hyperplane separating words in a text document from the rest of the words and hence would ensure good recovery.
 However, this still does not provably explain good recovery using pretrained embeddings and their good performance on classification tasks.
 Perhaps assuming a generative model for text, like the RankWalk model discussed in [an earlier post](https://www.offconvex.org/2016/02/14/word-embeddings-2/), could help us formally prove these statements. 
-
-<div style="text-align:center;">
-<img src="/assets/imdbperf_uni_bi.svg" style="width:400px;" />
-</div>
