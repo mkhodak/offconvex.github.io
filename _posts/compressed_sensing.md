@@ -50,8 +50,9 @@ To simplify things we analyze the unigram case first and then briefly describe h
 The bag-of-words (BoW) representation for a document $v_D^{BoW}$ is the sum of $V$ dimensional word vectors, where the vector for a word is its one-hot embedding and $V$ is the size of the vocabulary.
 The orthogonality of these word vectors lets us precisely recover the words of a document given the BoW representation.
 Now here's a crucial observation - since text documents typically have very few distinct words (much lesser than $V$), one could hope to use lower dimensionsal word vectors which are "almost orthogonal" and still be able to uniquely recover the words in a document.
-So if we had word vectors $v_w \in \mathbb{R}^d$ ($d << V$) which satisfied this almost orthogonality property, then the representation $v_D = \sum\limits_{w\in D} v_w$ would encode precisely the same information as $v_D^{BoW}$.
+So if we had word vectors $v_w \in \mathbb{R}^d$ ($d \ll V$) which satisfied this almost orthogonality property, then the representation $v_D = \sum\limits_{w\in D} v_w$ would encode precisely the same information as $v_D^{BoW}$.
 Note that $v_D = Av_D^{BoW}$, where $A$ is a $d\times V$ matrix whose columns correspond to the vectors $v_w$ for all words $w$ in the vocabulary, i.e. $v_D$ is a linear compression of $v_D^{BoW}$.
+
 This is where compressed sensing comes into the picture.
 Compressed sensing deals with finding conditions on the matrix A that enable the recovery of a sparse high-dimensional vector $x$ from the linear compression $Ax$.
 Note that the ability to recover the BoW vector doesn't directly imply having the same performance as BoW on all linear classification tasks (in fact, this is not true in general).
