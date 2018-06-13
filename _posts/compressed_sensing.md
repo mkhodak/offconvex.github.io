@@ -5,9 +5,6 @@ date:       2018-07-01 8:00:00
 author:     Sanjeev Arora, Mikhail Khodak, Nikunj Saunshi
 visible:    false
 ---
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
 
 In a recent [post](LINK), Sanjeev discussed some ideas behind unsupervised text embeddings, whose goal is to use a large text corpus to learn representations of documents that can be used to perform well on downstream tasks using only a few labeled examples. 
 Although deep learning approaches are popular in this area, it turns out that a simple weighted combination of word embeddings combined with some mild denoising ([the SIF embedding](https://openreview.net/pdf?id=SyK00v5xx)) outperforms many such methods, including [Skipthought](https://arxiv.org/pdf/1506.06726.pdf), on sentence semantic similarity tasks. 
