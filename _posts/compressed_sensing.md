@@ -138,4 +138,4 @@ Our empirical results on text classification using simple compositions of pretra
 Indeed, a new [NAACL'18 paper](https://arxiv.org/abs/1703.02507) of Pagliardini, Gupta, & Jaggi propose training unigram and bigram embeddings specifically to add them together to make document representations and achieve good results.
 We also give an information-theoretic account of these text embeddings using the theory of compressed sensing, highlighting its connection to downstream task performance, and discover a new property of pretrained word embeddings.
 While our compositional $n$-gram embeddings don't achieve similar results on sparse recovery, better-trained $n$-gram vectors (such as those in our upcoming [ACL'18 paper](https://arxiv.org/abs/1805.05388) with Yingyu Liang, Tengyu Ma, & Brandon Stewart) might be more likely to exhibit such properties.
-Perhaps not-incindentally, such embeddings also lead to better results for text classification.
+Perhaps not-coincidentally, such embeddings also lead to better results for text classification.
