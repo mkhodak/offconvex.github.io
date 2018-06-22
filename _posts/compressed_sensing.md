@@ -21,7 +21,7 @@ It seems that while unigram information suffices for similarity, classification 
 The simplest way of including word-order in a representation is to consider $n$-grams for $n>1$, starting with bigrams ($n=2$).
 While these alone cannot capture long-range dependencies, Bag-of-$n$-Grams (BonG) representations — an extension of BoW counting how many times each $n$-gram occurs in the document — are a [surprisingly strong baseline for document classification](https://www.aclweb.org/anthology/P12-2018).
 However, in an unsupervised setting they can still fail to capture similarity in ways that matter when only a few labeled samples are available. 
-For example, the sentences "This movies was great!" and "I enjoyed the film." should mean the same thing to a binary sentiment classifier but share no $n$-gram information of any order.
+For example, the sentences "This movie is great!" and "I enjoyed the film." should mean the same thing to a binary sentiment classifier but share no $n$-gram information of any order.
 Thus having a label for the first example tells us nothing about the second.
 
 <div style="text-align:center;">
