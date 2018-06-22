@@ -15,7 +15,7 @@ Our representations achieve performance that is provably competitive with strong
 
 Both the original paper and subsequent evaluations (see this nice [blog post](http://nlp.town/blog/sentence-similarity/) by Yves Peirsman) show that SIF embeddings work very well on semantic similarity/relatedness, outperforming neural approaches such as LSTMs and deep averaging networks.
 In these evaluations pairs of sentence embeddings are assigned scores based on their inner product or a trained regression targeting human ratings.
-However, SIF embeddings do not end up improving performance strongly on sentiment analysis tasks, with the weighting yielding only a slight improvement and classifiers being able to learn the component removal if necessary..
+However, SIF embeddings do not end up improving performance strongly on sentiment analysis tasks, with the weighting yielding only a slight improvement and classifiers being able to learn the component removal if necessary.
 It seems that while unigram information suffices for similarity, classification depends more on word-order, which SIF doesn't capture because it uses only Bag-of-Words (BoW) information.
 
 The simplest way of including word-order in a representation is to consider $n$-grams for $n>1$, starting with bigrams ($n=2$).
@@ -25,7 +25,7 @@ For example, the sentences "This movies was great!" and "I enjoyed the film." sh
 Thus having a label for the first example tells us nothing about the second.
 
 <div style="text-align:center;">
-<img src="/assets/unsupervised_pipeline.svg" style="width:300px;" />
+<img src="/assets/unsupervised_pipeline.png" style="width:300px;" />
 </div>
 
 We thus turn to simple distributed representations of $n$-grams.
@@ -43,7 +43,7 @@ Note how our approach does especially well compared to BonG on the Stanford Sent
 DisC embeddings also beat SIF and a standard LSTM-based method, Skipthoughts. 
 
 <div style="text-align:center;">
-<img src="/assets/clfperf_sst_imdb.svg" style="width:300px;" />
+<img src="/assets/clfperf_sst_imdb.png" style="width:300px;" />
 </div>
 
 <sup>[1] For *Distributed Cooccurrence* embeddings, used instead of *Distributed $n$-Gram* because the multiplication ignores word-order, so the actual feature these embeddings encode is words co-occurring in a window of size $n$. The distinction doesn't greatly affect performance in practice. </sup>
@@ -107,7 +107,7 @@ Additionally it can be easily shown that DisC embeddings are *computable by low-
 So the above results also imply that, if initialized correctly, **LSTMs are guaranteed to do approximately as well as BonG representations**, a result that extensive empirical study has been unable to establish.
 
 <div style="text-align:center;">
-<img src="/assets/imdbperf_uni_bi.svg" style="width:300px;" />
+<img src="/assets/imdbperf_uni_bi.png" style="width:300px;" />
 </div>
 
 We empirically tested the effect of dimensionality by measuring performance of DisC on IMDb sentiment classification.
