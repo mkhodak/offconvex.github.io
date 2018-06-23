@@ -36,7 +36,7 @@ v_{DisC}=\begin{pmatrix}\sum\limits_{w\in\operatorname{words}}v_w&\cdots&\sum\li
 Note that DisC embeddings can be more powerful than classic bag-of-n-gram representations because they leverage the power of word embeddings. For instance,  the sentences *"Loved this movie!"* and *"I enjoyed the film"* share no $n$-gram information for any $n$, but  their DisC embeddings are fairly similar. Indeed, the table below shows for several classification tasks DisC embeddings beat classic BonG methods, especially when the number of labeled examples in small (for instance the Stanford Sentiment Treebank (SST) task, which has only $6,000$ labeled examples). DisC embeddings also beat SIF and a standard LSTM-based method, Skipthoughts. 
 
 <div style="text-align:center;">
-<img src="/assets/clfperf_sst_imdb.png" style="width:300px;" />
+<img src="/assets/clfperf_sst_imdb.png" width ="40%" alt ="The pipeline" />
 </div>
 
 <sup>[1] For *Distributed Cooccurrence* embeddings, used instead of *Distributed $n$-Gram* because the multiplication ignores word-order, so the actual feature these embeddings encode is words co-occurring in a window of size $n$. The distinction doesn't greatly affect performance in practice. </sup>
