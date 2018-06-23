@@ -23,20 +23,17 @@ A trivial idea for incorporating $n$-grams into SIF embeddings would be to treat
 
 > **Compositional n-gram embedding:** Represent $n$-gram $g=(w_1,\dots,w_n)$ as the element-wise product $v_g=v_{w_1}\odot\cdots\odot v_{w_n}$ of the embeddings of its constituent words.
 
-Now we are ready to define our text embeddings.
+Note that due to use of element-wise multiplication we actually represent unordered $n$-gram information, not ordered $n$-grams. (We also tried methods that maintain order information, but the benefit was tiny.) Now we are ready to define our *Distributed Co-occurence (DisC) embeddings*.
 
->**DisC embedding**,<sup>1</sup> of a piece of text is just concatenation for $(v_1, v_2, \ldots)$ where $v_n$ is the sum of the $n$-gram embeddings of all $n$-grams in the document (for $n=1$ this is just the average of word embeddings).
-
-
+>**DisC embedding** of a piece of text is just concatenation for $(v_1, v_2, \ldots)$ where $v_n$ is the sum of the $n$-gram embeddings of all $n$-grams in the document (for $n=1$ this is just the average of word embeddings).
 
 
-Note that DisC embeddings can be more powerful than classic bag-of-n-gram representations because they leverage the power of word embeddings. For instance,  the sentences *"Loved this movie!"* and *"I enjoyed the film"* share no $n$-gram information for any $n$, but  their DisC embeddings are fairly similar. This causes them to outperform BonG on the Stanford Sentiment Treebank (SST) task, which has only $6,000$ labeled examples. DisC embeddings also beat SIF and a standard LSTM-based method, Skipthoughts. 
+Note that DisC embeddings leverage classic bag-of-n-gram information as well as the power of word embeddings. For instance,  the sentences *"Loved this movie!"* and *"I enjoyed the film."* share no $n$-gram information for any $n$, but  their DisC embeddings are fairly similar. Thus if the first example comes with a label, it gives the learner some idea of how to classify the second. This can be useful especially in settings with few labeled examples; e.g. DisC outperform BonG on the Stanford Sentiment Treebank (SST) task, which has only $6,000$ labeled examples. DisC embeddings also beat SIF and a standard LSTM-based method, Skipthoughts. 
 
 <div style="text-align:center;">
 <img src="/assets/clfperf_sst_imdb.png" width ="60%" alt ="The pipeline" />
 </div>
 
-<sup>[1] For *Distributed Cooccurrence* embeddings, used instead of *Distributed $n$-Gram* because the multiplication ignores word-order, so the actual feature these embeddings encode is words co-occurring in a window of size $n$. The distinction doesn't greatly affect performance in practice. </sup>
 
 ## Why should low-dimensional distributed representations do well?
 
