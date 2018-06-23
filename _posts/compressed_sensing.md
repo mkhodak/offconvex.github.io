@@ -64,20 +64,16 @@ Interestingly we also find that DisC using pretrained word embeddings like GloVe
 </div>
 
 
-## Pretrained word embeddings
+## Unexplained mystery: higher performance of pretrained word embeddings
 
-While our theoretical analysis relies on random word embeddings, in practice embeddings pretrained on large text corpora, such as GloVe and word2vec, are often used for language modeling and classification tasks as they commonly outperform random vectors.
-However, our analysis cannot be be applied to these pretrained embeddings because the matrix of pretrained embeddings does not satisfy RIP.
-In fact, instead of being almost orthogonal, embeddings for pairs of words that co-occur frequently are trained to have high inner product.
-So does their good empirical performance on tasks contradict our compressed sensing view of classification?
-To test this we conducted an experiment to check how well pretrained word embeddings encode word information in documents compared to random embeddings.
-We use Basis Pursuit, a sparse recovery approach related to LASSO with provable guarantees for RIP matrices, to recover words in documents from their sum-of-word-embeddings vectors for both random and pretrained word embeddings, measuring success via the $F_1$-score of the recovered words (higher is better). 
+While compressed sensing theory is a good starting point for understanding the power of linear text embeddings, it leaves some mysteries. Using pre-trained embeddings (such as GloVe) in DisC gives higher performance than random embeddings, both in recovering the BonG information out of the text embedding, as well as in downstream tasks. However, pre-trained embeddings do not satisfy any of the nice properties assumed in compressed sensing theory such as RIP, since there are many pairs of words that have embeddings that have a high inner product. 
+
+Even though the matrix of embeddings does not satisfy the classical compressed sensing properties, we find that using Basis Pursuit, a sparse recovery approach related to LASSO with provable guarantees for RIP matrices, we can recover bag-of-words information better using GloVe-based text embeddings than from embeddings using random word vectors ( measuring success via the $F_1$-score of the recovered words---higher is better). 
 
 <div stype="text-align:center;">
 <img src="/assets/recovery.png" style="width:300px" />
 </div>
 
-Suprisingly, we found that pretrained word embeddings recover words *more efficiently* than random embeddings at the same dimensionality, suggesting that pretrained embeddings are more efficient at encoding text documents.
 However random embeddings are unsurprisingly better at recovering words from random word salad (the right-hand image).
 An intuitive explanation for these observations is that since pretrained embeddings were trained on a large text corpus, they are specialized, in some sense, to do well only on real documents rather than a random collection of words.
 To make this intuition a bit more formal, we can use a result of [Donoho & Tanner](http://www.pnas.org/content/pnas/102/27/9446.full.pdf) to prove that words in a document can be recovered from the sum of word vectors if and only if there is a hyperplane containing the vectors for words in the document with the vectors for all other words on one side of it.
