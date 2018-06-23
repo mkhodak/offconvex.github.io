@@ -41,9 +41,9 @@ A linear SIF-like embedding is representing a document with bag-of-words vector 
 $$\sum_w \alpha_w x_w v_w,$$
 where $v_w$ is the embedding of word $w$ and $\alpha_w$ is a scaling term. In other words, it represents document $x$ as 
 $A x$ where $A$ is the matrix with as many columns as the number of words in the language, and the column corresponding to word $w$ is 
-$\alpha_w A$. (Note that $x$ has many zero coordinates corresponding to words that don't occur in the document.) 
+$\alpha_w A$. Note that $x$ has many zero coordinates corresponding to words that don't occur in the document; in other words is a *sparse* vector. 
 
-The starting point of our DisC work was the realization that perhaps the reason SIF-like embeddings work reasonably well is that they *preserve* the bag-of-words information, in the sense that it may be possible to *recover* $x$ from $A$. This is not an outlandish conjecture at all, because [*compressed sensing*](https://en.wikipedia.org/wiki/Compressed_sensing) shows that this is efficiently possible when $x$ is suitably sparse (which BoW vectors indeed are) and matrix $A$ has some nice properties such as RIP or Incoherence. A classic example concerns $A$ being a random matrix. 
+The starting point of our DisC work was the realization that perhaps the reason SIF-like embeddings work reasonably well is that they *preserve* the bag-of-words information, in the sense that it may be possible to *easily recover* $x$ from $A$. This is not an outlandish conjecture at all, because [*compressed sensing*](https://en.wikipedia.org/wiki/Compressed_sensing) does exactly this when $x$ is suitably sparse and matrix $A$ has some nice properties such as RIP or Incoherence. A classic example concerns $A$ being a random matrix, which in our case corresponds to using random vectors as word embeddings.  
 
 
 To understand the good performance of distributed representations, we begin by taking a closer look at their sparse counterparts.
