@@ -34,6 +34,7 @@ Note that DisC embeddings leverage classic bag-of-n-gram information as well as 
 <img src="/assets/clfperf_sst_imdb.png" width ="60%" alt ="Performance on SST and IMDB" />
 </div>
 
+On other classification tasks skip-thought beats our DisC embeddings by a small amount, but that's still not a shabby outcome for such a simple method. (By contrast, LSTM methods can take days or weeks of training, and are quite slow to evaluate at test time on a new piece of text.) 
 
 ## Some theoretical analysis via compressed sensing
 
@@ -85,10 +86,7 @@ Perhaps assuming a generative model for text, like the RandWalk model discussed 
 
 ## Discussion
 
-Our empirical results on text classification using simple compositions of pretrained word embeddings are further evidence that such simple representation schemes can still compete with more opaque deep learning approaches.
-As further evidence, a new [NAACL'18 paper](https://arxiv.org/abs/1703.02507) of Pagliardini, Gupta, & Jaggi proposes a text embedding similar to DisC in which unigram and bigram embeddings are trained specifically to be added together to form sentence embeddings, also achieving good results.
-We also give an information-theoretic account of DisC embeddings using the theory of compressed sensing, highlighting its connection to downstream task performance, and discover a new property of pretrained word embeddings.
-While our compositional $n$-gram embeddings don't achieve similar results on sparse recovery, learned $n$-gram vectors (such as those in our upcoming [ACL'18 paper](https://arxiv.org/abs/1805.05388) with Yingyu Liang, Tengyu Ma, & Brandon Stewart) might be more likely to exhibit such properties.
-Perhaps not-coincidentally, such embeddings also lead to better results for classification.
+Could we improve the performance of such simple embeddings even further? One promising idea is to define better n-gram embeddings than the simple compositional embeddings defined in DisC. A new [NAACL'18 paper](https://arxiv.org/abs/1703.02507) of Pagliardini, Gupta, & Jaggi proposes a text embedding similar to DisC in which unigram and bigram embeddings are trained specifically to be added together to form sentence embeddings, also achieving good results.
+In our upcoming [ACL'18 paper](https://arxiv.org/abs/1805.05388) with Yingyu Liang, Tengyu Ma, & Brandon Stewart) we give a very simple method to induce embeddings for n-grams as well as other rare linguistic features that improves even further. This will be described in a future blog post.
 
-We have made available [sample code for constructing and evaluating DisC embeddings](https://github.com/NLPrinceton/text_embedding) and [solvers for recreating the sparse recovery results for word embeddings](https://github.com/NLPrinceton/sparse_recovery).
+Sample code for constructing and evaluating DisC embeddings is [available](https://github.com/NLPrinceton/text_embedding) as well as [solvers for recreating the sparse recovery results for word embeddings](https://github.com/NLPrinceton/sparse_recovery).
