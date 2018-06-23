@@ -47,57 +47,22 @@ The starting point of our DisC work was the realization that perhaps the reason 
 
 This is a surprising result and not that compressed sensing does not imply this per se, since the ability to reconstruct the BoW vector from its compressed version doesn't directly imply that the compressed version gives same performance as BoW on linear classification tasks. However, a result of [Calderbank, Jafarpour, & Schapire](https://pdfs.semanticscholar.org/627c/14fe9097d459b8fd47e8a901694198be9d5d.pdf) shows that the compressed sensing condition that implies optimal recovery also implies good performance on linear classification under compression.
 
-Furthermore, by extending these ideas to the $n$-gram case, we show that our DisC embeddings with random word vectors, which are linear compressions of BonGs, can do as well as them on all linear classification tasks. To do this we prove that the "sensing" matrix $A$ corresponding to DisC embeddings has good *Restricted Isometry Property (RIP)*. Please see our paper for details.
+Furthermore, by extending these ideas to the $n$-gram case, we show that our DisC embeddings with random word vectors, which are linear compressions of BonGs, can do as well as them on all linear classification tasks. To do this we prove that the "sensing" matrix $A$ corresponding to DisC embeddings satisfy the  *Restricted Isometry Property (RIP)* introduced in the seminal paper of [Candes & Tao](https://statweb.stanford.edu/~candes/papers/DecodingLP.pdf).  The theorem relies upon  [compressed sensing results for bounded orthonormal systems](http://www.cis.pku.edu.cn/faculty/vision/zlin/A%20Mathematical%20Introduction%20to%20Compressive%20Sensing.pdf) and says that then the performance of DisC embeddings on linear classification tasks approaches that of BonG vectors as we increase the dimension. This is also verified experimentally. Please see our paper for details.
 
-## Learning under compression
+## A surprising lower bound on the power of LSTM-based text representations
 
-Let's first consider a well-known recovery condition on the compression matrix $A$: the **Restricted Isometry Property** (RIP) introduced by [Candes & Tao](https://statweb.stanford.edu/~candes/papers/DecodingLP.pdf) in their seminal paper on efficient recovery of sparse signals:
+The above result also leads to a new theorem about deep learning: *text embeddings computed using low-memory LSTMs should do at least as well as BonG representations on downstream classification tasks.* At first glance this result may seem uninteresting: surely it's no surprise that the field's latest and greatest method is at least as powerful as its oldest? But in practice, most papers on LSTM-based text embeddings make it a point to compare to performance of BonG baseline, and *often are unable to improve upon that baseline!* Thus empirically this new theorem had not been clear at all! 
 
->**Restricted Isometry Property (RIP)**: $A\in\mathbb{R}^{d\times n}$ satisfies $(k,\varepsilon)$-RIP if $(1-\varepsilon)\|x\|_2 \le \|Ax\|_2 \le (1+\varepsilon)\|x\|_2$, for all $k$-sparse $x\in\mathbb{R}^n$
+The new theorem follows from considering an LSTM that uses random vectors as word embeddings and computes the DisC embedding in one pass over the text. (For details see our appendix.) 
 
-In other words, every set of $k$ columns of $A$ must form a nearly orthogonal matrix (think of $k$ as being the maximum document length).
-This is a mathematical formulation of the "almost orthogonality" property alluded to earlier.
-
-RIP provably allows stable and efficient recovery of a sparse signal from its linear compression, a result which initiated the field of compressed sensing.
-But does RIP say anything about linear classification in the compressed domain ("compressed learning")?
-The following theorem (extension of a result by Calderbank et al.) shows that it indeed implies good classification performance over the compressed vectors.
-
->**Theorem**: Suppose $A\in\mathbb{R}^{d\times n}$ satisfies $(2k,\varepsilon)$-RIP and let $S = \{({\bf x}_i, y_i)\}_{i=1}^{m}$ be $m$ samples drawn i.i.d. from a distribution $\mathcal{D}$ over $k$-sparse vectors and binary labels.
-Let $\ell$ be a convex Lipschitz loss function and $w$ be the minimizer of $\ell$ on the distribution $\mathcal{D}$, then with high probability the classifier $\hat w_A$ which minimizes the $\ell_2$ regularized empirical loss over compressed samples $\{(A{\bf x}_i, y_i)\}_{i=1}^{m}$ satisfies
-\[
-\ell_{\mathcal{D}}(\hat w_A) \le \ell_{\mathcal{D}}(w) + \mathcal{O}\left(\sqrt{\varepsilon + \frac{1}{m}\log\frac{1}{\delta}}\right)
-\]
-
-This theorem states that if $A$ satisfies a certain RIP condition then the classifier learnt on the compressed samples $\{Ax_i\}$ will do as well as the best classifier on the uncompressed samples $\{x_i\}$, up to additive error $\mathcal{O}(\sqrt{\varepsilon})$ depending  on the RIP constant of $A$.
-Note that for every classifier $w_A$ in the compressed domain, the classifier $A^Tw_A$ in the original domain has the same loss as $w_A$ in the compressed domain.
-Therefore with many samples one cannot hope to do better than the original vectors on linear classfication by using only a linear compression.
-The theorem shows that RIP matrices ensure that compressed vectors are not too far away from the performance of the uncompressed vectors on all linear classification task.
-
-## Proving good performance of DisC
-
-It is easy to see that DisC embeddings $v_{DisC}=Av_{BonG}$ are linear compressions of BonGs, where $A$ is the matrix of $n$-gram vectors.
-Thus for the unigram case, if we assign each word a $d$-dimensional vector of i.i.d. Rademacher variables (normalized by $\frac{1}{\sqrt{d}}$) then each entry of $A\in\mathbb{R}^{d\times V}$ will be an independent Rademacher random variable, which is known to satisfy $(k,\varepsilon)$-RIP w.h.p. if $d=\tilde\Omega\left(\frac{k}{\varepsilon^2}\right)$ (this follows from concentration of sums of independent random variables).
-Applying the above theorem shows that low-dimensional ($d$ linear in the document length) unigram DisC embeddings built with random word vectors do approximately as well as BoW on linear classification.
-The additive error decreases to 0 asymptotically as the dimensionality $d$ of the word embeddings goes to infinity.
-
-For the $n$-gram case, showing that the matrix transforming BonG vectors to DisC vectors satisfies a similar RIP property is more non-trivial.
-This is because the columns of A (corresponding to $n$-grams embeddings) are no longer independent; columns of $n$-grams that share words will be dependent.
-We can get around this by using [compressed sensing results for bounded orthonormal systems](http://www.cis.pku.edu.cn/faculty/vision/zlin/A%20Mathematical%20Introduction%20to%20Compressive%20Sensing.pdf) to show that the matrix of $n$-gram embeddings also satisfies the required RIP condition (see paper for full proof).
-Combining these results proves that starting with $d=\tilde\Omega\left(\frac{k}{\varepsilon^2}\right)$ dimensional random word embeddings, the classifier $w_{DisC}$ trained on DisC representations will satisfy
-\[
-\ell_{\mathcal{D}}(w_{DisC}) \le \ell_{\mathcal{D}}(w_{BonG}) + \mathcal{O}\left(\sqrt{\varepsilon}\right)
-\]
-
-Additionally it can be easily shown that DisC embeddings are *computable by low-memory LSTMs*.
-So the above results also imply that, if initialized correctly, **LSTMs are guaranteed to do approximately as well as BonG representations**, a result that extensive empirical study has been unable to establish.
+We empirically tested the effect of dimensionality by measuring performance of DisC on IMDb sentiment classification.
+As our theory predicts, the accuracy of DisC using random word embeddings converges to that of BonGs as dimensionality increases.
+Interestingly we also find that DisC using pretrained word embeddings like GloVe converges to BonG performance at much smaller dimensions, an unsurprising but important point that we will discuss next.
 
 <div style="text-align:center;">
 <img src="/assets/imdbperf_uni_bi.png" style="width:300px;" />
 </div>
 
-We empirically tested the effect of dimensionality by measuring performance of DisC on IMDb sentiment classification.
-As our theory predicts, the accuracy of DisC using random word embeddings converges to that of BonGs as dimensionality increases.
-Interestingly we also find that DisC using pretrained word embeddings like GloVe converges to BonG performance at much smaller dimensions, an unsurprising but important point that we will discuss next.
 
 ## Pretrained word embeddings
 
