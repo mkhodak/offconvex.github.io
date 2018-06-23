@@ -68,19 +68,20 @@ Interestingly we also find that DisC using pretrained word embeddings like GloVe
 
 While compressed sensing theory is a good starting point for understanding the power of linear text embeddings, it leaves some mysteries. Using pre-trained embeddings (such as GloVe) in DisC gives higher performance than random embeddings, both in recovering the BonG information out of the text embedding, as well as in downstream tasks. However, pre-trained embeddings do not satisfy any of the nice properties assumed in compressed sensing theory such as RIP, since there are many pairs of words that have embeddings that have a high inner product. 
 
-Even though the matrix of embeddings does not satisfy the classical compressed sensing properties, we find that using Basis Pursuit, a sparse recovery approach related to LASSO with provable guarantees for RIP matrices, we can recover bag-of-words information better using GloVe-based text embeddings than from embeddings using random word vectors ( measuring success via the $F_1$-score of the recovered words---higher is better). 
+Even though the matrix of embeddings does not satisfy the classical compressed sensing properties, we find that using Basis Pursuit, a sparse recovery approach related to LASSO with provable guarantees for RIP matrices, we can recover bag-of-words information better using GloVe-based text embeddings than from embeddings using random word vectors ( measuring success via the $F_1$-score of the recovered words---higher is better). Note that "Rademacher vectors" are those with entries drawn randomly from $+1,-1$.
 
 <div stype="text-align:center;">
 <img src="/assets/recovery.png" style="width:300px" />
 </div>
 
-However random embeddings are unsurprisingly better at recovering words from random word salad (the right-hand image).
-An intuitive explanation for these observations is that since pretrained embeddings were trained on a large text corpus, they are specialized, in some sense, to do well only on real documents rather than a random collection of words.
-To make this intuition a bit more formal, we can use a result of [Donoho & Tanner](http://www.pnas.org/content/pnas/102/27/9446.full.pdf) to prove that words in a document can be recovered from the sum of word vectors if and only if there is a hyperplane containing the vectors for words in the document with the vectors for all other words on one side of it.
-Since co-occurring words will have similar embeddings, it would make it easier to find such a hyperplane separating words in a document from the rest of the words and hence would ensure good recovery.
+Note that random embeddings are better than pretrained embeddings at recovering words from random word salad (the right-hand image).
+This suggests that pretrained embeddings are specialized ---thanks to their training on a text corpus---to do well only on real text rather than a random collection of words.
+It would be nice to give a mathematica explanation for this phenomenon. We suspect that this should be possible using a
+result of [Donoho & Tanner](http://www.pnas.org/content/pnas/102/27/9446.full.pdf) which impies that words in a document can be recovered from the sum of word vectors if and only if there is a hyperplane containing the vectors for words in the document with the vectors for all other words on one side of it.
 
-However, this still does not provably explain good recovery using pretrained embeddings, and even such a result would not necessarily imply good performance on classification tasks, as current compressed learning results depend on RIP and not sparse recovery.
-Perhaps assuming a generative model for text, like the RandWalk model discussed in an [earlier post](https://www.offconvex.org/2016/02/14/word-embeddings-2/), could help us formally prove these statements.
+Since co-occurring words will have similar embeddings, that should make it easier to find such a hyperplane separating words in a document from the rest of the words and hence would ensure good recovery.  Even if this could be made more rigorous, it would only imply sparse recovery, not  good performance on classification tasks.
+Perhaps assuming a generative model for text, like the RandWalk model discussed in an [earlier post](https://www.offconvex.org/2016/02/14/word-embeddings-2/), could help move this theory forward.
+
 
 ## Discussion
 
