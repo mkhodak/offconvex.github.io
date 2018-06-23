@@ -8,9 +8,7 @@ visible:    false
 
  [Sanjeev's post](http://www.offconvex.org/2018/06/17/textembeddings/), discussed a simple text embedding, [the SIF embedding](https://openreview.net/pdf?id=SyK00v5xx), which is a simple weighted combination of word embeddings combined with some mild denoising ( outperforms many deep learning based methods, including [Skipthought](https://arxiv.org/pdf/1506.06726.pdf), on some downstream NLP tasks such as sentence semantic similarity and entailment. See also this independent [study by Yves Peirsman](http://nlp.town/blog/sentence-similarity/).
  
-However, SIF embeddings only have middling performance on other downstream classification tasks, very likely because they ignore word order, unlike deep learning methods. This raises the question of how to modify SIF embeddings to incorporate word order information. 
-Today's post discusses our recent [ICLR'18 paper](https://openreview.net/pdf?id=B1e5ef-C-) with Kiran Vodrahalli that does this 
-and achieve performance that is provably competitive with strong sparse-feature baselines for the case of random word embeddings and empirically outperforms LSTM-based methods when using pretrained (GloVe) word vectors.
+However, SIF embeddings only have middling performance on other downstream classification tasks compared to deep learning methods, probably because they ignore word order. (In this sense they are related to classic *Bag of Word* models.)  Can we design a text embedding with the simplicity and transparency of SIF while incorporating word order information?  Today's post discusses our recent [ICLR'18 paper](https://openreview.net/pdf?id=B1e5ef-C-) with Kiran Vodrahalli that does this and achieve performance that is provably competitive with strong sparse-feature baselines for the case of random word embeddings and empirically outperforms pre-2018 LSTM-based methods when using pretrained (GloVe) word vectors.
 
 ## Simple text embeddings incorporating local word order
 
