@@ -31,7 +31,7 @@ Note that due to use of element-wise multiplication we actually represent unorde
 Note that DisC embeddings leverage classic bag-of-n-gram information as well as the power of word embeddings. For instance,  the sentences *"Loved this movie!"* and *"I enjoyed the film."* share no $n$-gram information for any $n$, but  their DisC embeddings are fairly similar. Thus if the first example comes with a label, it gives the learner some idea of how to classify the second. This can be useful especially in settings with few labeled examples; e.g. DisC outperform BonG on the Stanford Sentiment Treebank (SST) task, which has only $6,000$ labeled examples. DisC embeddings also beat SIF and a standard LSTM-based method, Skipthoughts. On the much larger IMDB testbed, BonG still reigns at top. 
 
 <div style="text-align:center;">
-<img src="/assets/clfperf_sst_imdb.png" width ="60%" alt ="The pipeline" />
+<img src="/assets/clfperf_sst_imdb.png" width ="60%" alt ="Performance on SST and IMDB" />
 </div>
 
 
