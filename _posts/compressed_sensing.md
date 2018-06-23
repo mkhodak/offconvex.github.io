@@ -12,10 +12,13 @@ However, SIF embeddings embeddings ignore word order (similar to classic *Bag of
 
 ## Incorporating local word order: n-gram embeddings
 
-Recall that *bigrams* are ordered word-pairs that appear in the sentence, and $n$-grams are ordered $n$-tuples. A piece of text with $k$ words has $k-1$ bigrams and $k-n+1$ $n$-grams. 
+*Bigrams* are ordered word-pairs that appear in the sentence, and $n$-grams are ordered $n$-tuples. A piece of text with $k$ words has $k-1$ bigrams and $k-n+1$ $n$-grams. Classic NLP methods utilise information about $n$-grams, and simple linear classifiers using Bag-of-n-gram (BonG) information are a [surprisingly strong baseline for document classification](https://www.aclweb.org/anthology/P12-2018).
+Of course, $n$-grams cannot capture long-range dependencies which LSTMs in principle can. But it will be surprising how much power this already gives. 
 
-The simplest way of including word-order in a representation is to consider $n$-grams for $n>1$, starting with bigrams ($n=2$).
-While these alone cannot capture long-range dependencies, Bag-of-$n$-Grams (BonG) representations — an extension of BoW counting how many times each $n$-gram occurs in the document — are a [surprisingly strong baseline for document classification](https://www.aclweb.org/anthology/P12-2018).
+The trivial idea for incorporating $n$-grams into SIF embeddings is to treat n-grams like words, and compute word embeddings for them using either GloVe and word2vec. But the practical difficulty is that the number of distinct n-grams in the corpus gets very large even for $n=2$ (let alone $n=3$), making it almost impossible to solve word2vec or GloVe on current systems. Thus efficiency dictates a more *compositional* approach, defining in terms of word embeddings of the words involved in the $n$-gram.
+
+> Compositional $n$-gram embedding: Represent $n$-gram $g=(w_1,\dots,w_n)$ as the element-wise product $v_g=v_{w_1}\odot\cdots\odot v_{w_n}$ of the embeddings of its words.
+
 However, in an unsupervised setting they can still fail to capture similarity in ways that matter when only a few labeled samples are available. 
 For example, the sentences "This movie is great!" and "I enjoyed the film." should mean the same thing to a binary sentiment classifier but share no $n$-gram information of any order.
 Thus having a label for the first example tells us nothing about the second.
@@ -24,10 +27,8 @@ Thus having a label for the first example tells us nothing about the second.
 <img src="/assets/unsupervised_pipeline.png" style="width:300px;" />
 </div>
 
-We thus turn to simple distributed representations of $n$-grams.
-Noting that representations such as SIF are just (weighted) sums of unigram embeddings, we can define our new embeddings as summations over $n$-gram embeddings for small $n$.
-However, $n$-gram embeddings are not always available, so we want them to be compositional as well.
-We take an elementary approach and represent each $n$-gram $g=(w_1,\dots,w_n)$ as the element-wise product $v_g=v_{w_1}\odot\cdots\odot v_{w_n}$ of the embeddings of its words.
+
+
 While standard training objectives favor additive rather than multiplicative composition, the latter turns out to have useful theoretical properties for random word embeddings.
 
 Our document embeddings, which we call **DisC embeddings**,<sup>1</sup> are then just concatenations over $n$ of the sum-of-embeddings of all $n$-grams in the document (for $n=1$ this is just the sum-of-word-embeddings): 
