@@ -17,7 +17,7 @@ Of course, $n$-grams don't exploit long-range dependencies in text, while an LST
 
 The trivial idea for incorporating $n$-grams into SIF embeddings would be to treat n-grams like words, and compute word embeddings for them using either GloVe and word2vec.  But the practical difficulty is that the number of distinct n-grams in the corpus gets very large even for $n=2$ (let alone $n=3$), making it almost impossible to solve word2vec or GloVe on current systems. Thus efficiency considerations dictate a more *compositional* approach.
 
-> {\bf Compositional n-gram embedding}: Represent $n$-gram $g=(w_1,\dots,w_n)$ as the element-wise product $v_g=v_{w_1}\odot\cdots\odot v_{w_n}$ of the embeddings of its constituent words.
+> **Compositional n-gram embedding:** Represent $n$-gram $g=(w_1,\dots,w_n)$ as the element-wise product $v_g=v_{w_1}\odot\cdots\odot v_{w_n}$ of the embeddings of its constituent words.
 
 Now we are ready to define our text embeddings.
 
