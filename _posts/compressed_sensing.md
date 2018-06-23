@@ -6,16 +6,13 @@ author:     Sanjeev Arora, Mikhail Khodak, Nikunj Saunshi
 visible:    false
 ---
 
- [Sanjeev's post](http://www.offconvex.org/2018/06/17/textembeddings/), discussed a simple text embedding, [the SIF embedding](https://openreview.net/pdf?id=SyK00v5xx), which is a simple weighted combination of word embeddings combined with some mild denoising ( outperforms many deep learning based methods, including [Skipthought](https://arxiv.org/pdf/1506.06726.pdf), on some downstream NLP tasks such as sentence semantic similarity and entailment. See also this independent [study by Yves Peirsman](http://nlp.town/blog/sentence-similarity/).
+ [Sanjeev's post](http://www.offconvex.org/2018/06/17/textembeddings/), discussed a simple text embedding, [the SIF embedding](https://openreview.net/pdf?id=SyK00v5xx), which is a simple weighted combination of word embeddings combined with some mild denoising ( outperforms many deep learning based methods, including [Skipthought](https://arxiv.org/pdf/1506.06726.pdf), on some downstream NLP tasks such as sentence semantic similarity and entailment. See also this [independent study by Yves Peirsman](http://nlp.town/blog/sentence-similarity/).
  
-However, SIF embeddings only have middling performance on other downstream classification tasks compared to deep learning methods, probably because they ignore word order. (In this sense they are related to classic *Bag of Word* models.)  Can we design a text embedding with the simplicity and transparency of SIF while incorporating word order information?  Today's post discusses our recent [ICLR'18 paper](https://openreview.net/pdf?id=B1e5ef-C-) with Kiran Vodrahalli that does this and achieve performance that is provably competitive with strong sparse-feature baselines for the case of random word embeddings and empirically outperforms pre-2018 LSTM-based methods when using pretrained (GloVe) word vectors.
+However, SIF embeddings embeddings ignore word order (similar to classic *Bag of Word* models), which leads to unexciting performance on many other downstream classification tasks as compared to deep learning methods. Can we design a text embedding with the simplicity and transparency of SIF while incorporating word order information?   Our [ICLR'18 paper](https://openreview.net/pdf?id=B1e5ef-C-) with Kiran Vodrahalli does this, and achieves strong empirical performance and also some surprising theoretical guarantees stemming from the theory of compressed sensing. It is competitive with all pre-2018 LSTM-based methods, and is much faster to compute, since it uses pretrained (GloVe) word vectors and simple linear algebra. 
 
-## Simple text embeddings incorporating local word order
+## Incorporating local word order: n-gram embeddings
 
-Both the original paper and subsequent evaluations show that SIF embeddings work very well on semantic similarity/relatedness, outperforming neural approaches such as LSTMs and deep averaging networks.
-In these evaluations pairs of sentence embeddings are assigned scores based on their inner product or a trained regression targeting human ratings.
-However, SIF embeddings do not end up improving performance strongly on sentiment analysis tasks, with the weighting yielding only a slight improvement and classifiers being able to learn the component removal if necessary.
-It seems that while unigram information suffices for similarity, classification depends more on word-order, which SIF doesn't capture because it uses only Bag-of-Words (BoW) information.
+Recall that *bigrams* are ordered word-pairs that appear in the sentence, and $n$-grams are ordered $n$-tuples. A piece of text with $k$ words has $k-1$ bigrams and $k-n+1$ $n$-grams. 
 
 The simplest way of including word-order in a representation is to consider $n$-grams for $n>1$, starting with bigrams ($n=2$).
 While these alone cannot capture long-range dependencies, Bag-of-$n$-Grams (BonG) representations — an extension of BoW counting how many times each $n$-gram occurs in the document — are a [surprisingly strong baseline for document classification](https://www.aclweb.org/anthology/P12-2018).
