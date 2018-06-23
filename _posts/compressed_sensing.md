@@ -8,36 +8,32 @@ visible:    false
 
  [Sanjeev's post](http://www.offconvex.org/2018/06/17/textembeddings/), discussed a simple text embedding, [the SIF embedding](https://openreview.net/pdf?id=SyK00v5xx), which is a simple weighted combination of word embeddings combined with some mild denoising ( outperforms many deep learning based methods, including [Skipthought](https://arxiv.org/pdf/1506.06726.pdf), on some downstream NLP tasks such as sentence semantic similarity and entailment. See also this [independent study by Yves Peirsman](http://nlp.town/blog/sentence-similarity/).
  
-However, SIF embeddings embeddings ignore word order (similar to classic *Bag of Word* models), which leads to unexciting performance on many other downstream classification tasks as compared to deep learning methods. Can we design a text embedding with the simplicity and transparency of SIF while incorporating word order information?   Our [ICLR'18 paper](https://openreview.net/pdf?id=B1e5ef-C-) with Kiran Vodrahalli does this, and achieves strong empirical performance and also some surprising theoretical guarantees stemming from the theory of compressed sensing. It is competitive with all pre-2018 LSTM-based methods, and is much faster to compute, since it uses pretrained (GloVe) word vectors and simple linear algebra. 
+However, SIF embeddings embeddings ignore word order (similar to classic *Bag of Word* models), which leads to unexciting performance on many other downstream classification tasks as compared to deep learning methods. (We find that the denoising via SVD in SIF also negatively affects performance on some classification tasks.) Can we design a text embedding with the simplicity and transparency of SIF while also incorporating word order information?   Our [ICLR'18 paper](https://openreview.net/pdf?id=B1e5ef-C-) with Kiran Vodrahalli does this, and achieves strong empirical performance and also some surprising theoretical guarantees stemming from the theory of compressed sensing. It is competitive with all pre-2018 LSTM-based methods, and is much faster to compute, since it uses pretrained (GloVe) word vectors and simple linear algebra. 
 
 ## Incorporating local word order: n-gram embeddings
 
-*Bigrams* are ordered word-pairs that appear in the sentence, and $n$-grams are ordered $n$-tuples. A piece of text with $k$ words has $k-1$ bigrams and $k-n+1$ $n$-grams. Classic NLP methods utilise information about $n$-grams, and simple linear classifiers using Bag-of-n-gram (BonG) information are a [surprisingly strong baseline for document classification](https://www.aclweb.org/anthology/P12-2018).
-Of course, $n$-grams cannot capture long-range dependencies which LSTMs in principle can. But it will be surprising how much power this already gives. 
+*Bigrams* are ordered word-pairs that appear in the sentence, and $n$-grams are ordered $n$-tuples. A piece of text with $k$ words has $k-1$ bigrams and $k-n+1$ $n$-grams. Classic NLP methods exploit information about $n$-grams, and simple linear classifiers using Bag-of-n-gram (BonG) information are a [surprisingly strong baseline for document classification tasks](https://www.aclweb.org/anthology/P12-2018).
+Of course, $n$-grams don't exploit long-range dependencies in text, while an LSTM can. 
 
-The trivial idea for incorporating $n$-grams into SIF embeddings is to treat n-grams like words, and compute word embeddings for them using either GloVe and word2vec. But the practical difficulty is that the number of distinct n-grams in the corpus gets very large even for $n=2$ (let alone $n=3$), making it almost impossible to solve word2vec or GloVe on current systems. Thus efficiency dictates a more *compositional* approach, defining in terms of word embeddings of the words involved in the $n$-gram.
+The trivial idea for incorporating $n$-grams into SIF embeddings would be to treat n-grams like words, and compute word embeddings for them using either GloVe and word2vec.  But the practical difficulty is that the number of distinct n-grams in the corpus gets very large even for $n=2$ (let alone $n=3$), making it almost impossible to solve word2vec or GloVe on current systems. Thus efficiency considerations dictate a more *compositional* approach.
 
-> Compositional $n$-gram embedding: Represent $n$-gram $g=(w_1,\dots,w_n)$ as the element-wise product $v_g=v_{w_1}\odot\cdots\odot v_{w_n}$ of the embeddings of its words.
+> {\bf Compositional n-gram embedding}: Represent $n$-gram $g=(w_1,\dots,w_n)$ as the element-wise product $v_g=v_{w_1}\odot\cdots\odot v_{w_n}$ of the embeddings of its constituent words.
 
-However, in an unsupervised setting they can still fail to capture similarity in ways that matter when only a few labeled samples are available. 
-For example, the sentences "This movie is great!" and "I enjoyed the film." should mean the same thing to a binary sentiment classifier but share no $n$-gram information of any order.
-Thus having a label for the first example tells us nothing about the second.
+Now we are ready to define our text embeddings.
+
+>**DisC embedding**,<sup>1</sup> of a piece of text is just concatenation for $(v_1, v_2, \ldots)$ where $v_n$ is the sum of the $n$-gram embeddings of all $n$-grams in the document (for $n=1$ this is just the average of word embeddings).
+
+(IS FOLLOWING NOTATION NEEDED LATER??)
+
+\[
+v_{DisC}=\begin{pmatrix}\sum\limits_{w\in\operatorname{words}}v_w&\cdots&\sum\limits_{g\in\operatorname{n-grams}}v_g\end{pmatrix}
+\]
 
 <div style="text-align:center;">
 <img src="/assets/unsupervised_pipeline.png" style="width:300px;" />
 </div>
 
-
-
-While standard training objectives favor additive rather than multiplicative composition, the latter turns out to have useful theoretical properties for random word embeddings.
-
-Our document embeddings, which we call **DisC embeddings**,<sup>1</sup> are then just concatenations over $n$ of the sum-of-embeddings of all $n$-grams in the document (for $n=1$ this is just the sum-of-word-embeddings): 
-\[
-v_{DisC}=\begin{pmatrix}\sum\limits_{w\in\operatorname{words}}v_w&\cdots&\sum\limits_{g\in\operatorname{n-grams}}v_g\end{pmatrix}
-\]
-When embeddings $v_w$ are trained using [GloVe](http://www.aclweb.org/anthology/D14-1162) on a large corpus of Amazon reviews, this representation compares quite well to both BonG approaches and LSTM methods on sentiment analysis.
-Note how our approach does especially well compared to BonG on the Stanford Sentiment Treebank (SST) tasks, which have fewer labeled examples (~6000) than the IMDb classification task (~25000), highlighting the strength of unsupervised distributed representations at allowing good generalization with little data.
-DisC embeddings also beat SIF and a standard LSTM-based method, Skipthoughts. 
+Note that DisC embeddings can be more powerful than classic bag-of-n-gram representations because they leverage the power of word embeddings. For instance,  the sentences *"Loved this movie!"* and *"I enjoyed the film"* share no $n$-gram information for any $n$, but  their DisC embeddings are fairly similar. Indeed, the table below shows for several classification tasks DisC embeddings beat classic BonG methods, especially when the number of labeled examples in small (for instance the Stanford Sentiment Treebank (SST) task, which has only $6,000$ labeled examples). DisC embeddings also beat SIF and a standard LSTM-based method, Skipthoughts. 
 
 <div style="text-align:center;">
 <img src="/assets/clfperf_sst_imdb.png" style="width:300px;" />
