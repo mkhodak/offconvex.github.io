@@ -1,19 +1,20 @@
 ---
 layout:     post
-title:      Deep-learning-free Text and Sentence Embedding Part 2: A Compressed Sensing View
+title:      Deep-learning-free Text and Sentence Embedding, Part 2
 date:       2018-07-01 8:00:00
 author:     Sanjeev Arora, Mikhail Khodak, Nikunj Saunshi
 visible:    false
 ---
 
-In a recent [post](http://www.offconvex.org/2018/06/17/textembeddings/), Sanjeev discussed some ideas behind unsupervised text embeddings, whose goal is to use a large text corpus to learn representations of documents that can be used to perform well on downstream tasks using only a few labeled examples. 
-Although deep learning approaches are popular in this area, in fact a simple weighted combination of word embeddings combined with some mild denoising ([the SIF embedding](https://openreview.net/pdf?id=SyK00v5xx)) outperforms many such methods, including [Skipthought](https://arxiv.org/pdf/1506.06726.pdf), on sentence semantic similarity tasks. 
-In this post we will discuss our recent [ICLR'18 paper](https://openreview.net/pdf?id=B1e5ef-C-) with Kiran Vodrahalli, where we target a similar goal — simple, compositional document embeddings — in the context of text *classification*. 
-Our representations achieve performance that is provably competitive with strong sparse-feature baselines for the case of random word embeddings and empirically outperforms LSTM-based methods when using pretrained (GloVe) word vectors.
+ [Sanjeev's post](http://www.offconvex.org/2018/06/17/textembeddings/), discussed a simple text embedding, [the SIF embedding](https://openreview.net/pdf?id=SyK00v5xx), which is a simple weighted combination of word embeddings combined with some mild denoising ( outperforms many deep learning based methods, including [Skipthought](https://arxiv.org/pdf/1506.06726.pdf), on some downstream NLP tasks such as sentence semantic similarity and entailment. See also this independent [study by Yves Peirsman](http://nlp.town/blog/sentence-similarity/).
+ 
+However, SIF embeddings only have middling performance on other downstream classification tasks, very likely because they ignore word order, unlike deep learning methods. This raises the question of how to modify SIF embeddings to incorporate word order information. 
+Today's post discusses our recent [ICLR'18 paper](https://openreview.net/pdf?id=B1e5ef-C-) with Kiran Vodrahalli that does this 
+and achieve performance that is provably competitive with strong sparse-feature baselines for the case of random word embeddings and empirically outperforms LSTM-based methods when using pretrained (GloVe) word vectors.
 
 ## Simple text embeddings incorporating local word order
 
-Both the original paper and subsequent evaluations (see this nice [blog post](http://nlp.town/blog/sentence-similarity/) by Yves Peirsman) show that SIF embeddings work very well on semantic similarity/relatedness, outperforming neural approaches such as LSTMs and deep averaging networks.
+Both the original paper and subsequent evaluations show that SIF embeddings work very well on semantic similarity/relatedness, outperforming neural approaches such as LSTMs and deep averaging networks.
 In these evaluations pairs of sentence embeddings are assigned scores based on their inner product or a trained regression targeting human ratings.
 However, SIF embeddings do not end up improving performance strongly on sentiment analysis tasks, with the weighting yielding only a slight improvement and classifiers being able to learn the component removal if necessary.
 It seems that while unigram information suffices for similarity, classification depends more on word-order, which SIF doesn't capture because it uses only Bag-of-Words (BoW) information.
