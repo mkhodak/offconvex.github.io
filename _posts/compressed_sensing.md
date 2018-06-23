@@ -28,7 +28,7 @@ Note that due to use of element-wise multiplication we actually represent unorde
 >**DisC embedding** of a piece of text is just concatenation for $(v_1, v_2, \ldots)$ where $v_n$ is the sum of the $n$-gram embeddings of all $n$-grams in the document (for $n=1$ this is just the average of word embeddings).
 
 
-Note that DisC embeddings leverage classic bag-of-n-gram information as well as the power of word embeddings. For instance,  the sentences *"Loved this movie!"* and *"I enjoyed the film."* share no $n$-gram information for any $n$, but  their DisC embeddings are fairly similar. Thus if the first example comes with a label, it gives the learner some idea of how to classify the second. This can be useful especially in settings with few labeled examples; e.g. DisC outperform BonG on the Stanford Sentiment Treebank (SST) task, which has only $6,000$ labeled examples. DisC embeddings also beat SIF and a standard LSTM-based method, Skipthoughts. 
+Note that DisC embeddings leverage classic bag-of-n-gram information as well as the power of word embeddings. For instance,  the sentences *"Loved this movie!"* and *"I enjoyed the film."* share no $n$-gram information for any $n$, but  their DisC embeddings are fairly similar. Thus if the first example comes with a label, it gives the learner some idea of how to classify the second. This can be useful especially in settings with few labeled examples; e.g. DisC outperform BonG on the Stanford Sentiment Treebank (SST) task, which has only $6,000$ labeled examples. DisC embeddings also beat SIF and a standard LSTM-based method, Skipthoughts. On the much larger IMDB testbed, BonG still reigns at top. 
 
 <div style="text-align:center;">
 <img src="/assets/clfperf_sst_imdb.png" width ="60%" alt ="The pipeline" />
@@ -43,22 +43,11 @@ where $v_w$ is the embedding of word $w$ and $\alpha_w$ is a scaling term. In ot
 $A x$ where $A$ is the matrix with as many columns as the number of words in the language, and the column corresponding to word $w$ is 
 $\alpha_w A$. Note that $x$ has many zero coordinates corresponding to words that don't occur in the document; in other words is a *sparse* vector. 
 
-The starting point of our DisC work was the realization that perhaps the reason SIF-like embeddings work reasonably well is that they *preserve* the bag-of-words information, in the sense that it may be possible to *easily recover* $x$ from $A$. This is not an outlandish conjecture at all, because [*compressed sensing*](https://en.wikipedia.org/wiki/Compressed_sensing) does exactly this when $x$ is suitably sparse and matrix $A$ has some nice properties such as RIP or Incoherence. A classic example concerns $A$ being a random matrix, which in our case corresponds to using random vectors as word embeddings.  
+The starting point of our DisC work was the realization that perhaps the reason SIF-like embeddings work reasonably well is that they *preserve* the bag-of-words information, in the sense that it may be possible to *easily recover* $x$ from $A$. This is not an outlandish conjecture at all, because [*compressed sensing*](https://en.wikipedia.org/wiki/Compressed_sensing) does exactly this when $x$ is suitably sparse and matrix $A$ has some nice properties such as RIP or Incoherence. A classic example concerns $A$ being a random matrix, which in our case corresponds to using random vectors as word embeddings.  Thus one could try to use random word embeddings instead of GloVe vectors in the construction and see what happens! Indeed, we find that so long as we raise the dimension of the word embeddings, then text embeddings using random vectors do indeed converge to the performance of BonG representations. 
 
+This is a surprising result and not that compressed sensing does not imply this per se, since the ability to reconstruct the BoW vector from its compressed version doesn't directly imply that the compressed version gives same performance as BoW on linear classification tasks. However, a result of [Calderbank, Jafarpour, & Schapire](https://pdfs.semanticscholar.org/627c/14fe9097d459b8fd47e8a901694198be9d5d.pdf) shows that the compressed sensing condition that implies optimal recovery also implies good performance on linear classification under compression.
 
-To understand the good performance of distributed representations, we begin by taking a closer look at their sparse counterparts.
-We will start with the unigram case and then extend the analysis to $n$-grams.
-Note first that the bag-of-words (BoW) representation for a document $v_{BoW}$ is the sum of $V$ dimensional word vectors, where the vector for a word is its one-hot embedding and $V$ is the vocab size.
-The orthogonality of such word vectors lets us recover all the words of a document given the BoW represention.
-Now here's a crucial observation - since documents typically have very few distinct words ($\ll V$), one could hope to use low-dimensional word vectors which are "almost orthogonal" and still be able to uniquely recover the words in a document.
-So if we had vectors $v_w \in \mathbb{R}^d$ ($d \ll V$) satisfying this almost orthogonality property, then the representation $v_{sum}=\sum\limits_{w\in\operatorname{words}}v_w$ would encode precisely the same information as $v_{BoW}$.
-Note that $v_{sum} = Av_{BoW}$, where $A$ is a $d\times V$ matrix whose columns correspond to the vectors $v_w$ for all words $w$ in the vocabulary, i.e. $v_{sum}$ is a linear compression of $v_{BoW}$.
-
-Here is where compressed sensing comes into the picture.
-This field deals with finding conditions on the matrix A that enable the recovery of a sparse high-dimensional vector $x$ from the linear compression $Ax$.
-Note that the ability to recover the BoW vector doesn't directly imply having the same performance as BoW on all linear classification tasks (this is not true in general).
-However, a result of [Calderbank, Jafarpour, & Schapire](https://pdfs.semanticscholar.org/627c/14fe9097d459b8fd47e8a901694198be9d5d.pdf) shows that the compressed sensing condition that implies optimal recovery also implies good performance on linear classification under compression.
-Furthermore, by extending these ideas to the $n$-gram case, we show that our DisC embeddings with random word vectors, which are linear compressions of BonGs, can do as well as them on all linear classification tasks.
+Furthermore, by extending these ideas to the $n$-gram case, we show that our DisC embeddings with random word vectors, which are linear compressions of BonGs, can do as well as them on all linear classification tasks. To do this we prove that the "sensing" matrix $A$ corresponding to DisC embeddings has good *Restricted Isometry Property (RIP)*. Please see our paper for details.
 
 ## Learning under compression
 
