@@ -86,7 +86,7 @@ Perhaps assuming a generative model for text, like the RandWalk model discussed 
 
 ## Discussion
 
-Could we improve the performance of such simple embeddings even further? One promising idea is to define better n-gram embeddings than the simple compositional embeddings defined in DisC. A new [NAACL'18 paper](https://arxiv.org/abs/1703.02507) of Pagliardini, Gupta, & Jaggi proposes a text embedding similar to DisC in which unigram and bigram embeddings are trained specifically to be added together to form sentence embeddings, also achieving good results.
-In our upcoming [ACL'18 paper](https://arxiv.org/abs/1805.05388) with Yingyu Liang, Tengyu Ma, & Brandon Stewart) we give a very simple method to induce embeddings for n-grams as well as other rare linguistic features that improves even further. This will be described in a future blog post.
+Could we improve the performance of such simple embeddings even further? One promising idea is to define better n-gram embeddings than the simple compositional embeddings defined in DisC. An independent  [NAACL'18 paper](https://arxiv.org/abs/1703.02507) of Pagliardini, Gupta, & Jaggi proposes a text embedding similar to DisC in which unigram and bigram embeddings are trained specifically to be added together to form sentence embeddings, also achieving good results. (Of course, the computational time is higher than ours.) 
+In our upcoming [ACL'18 paper](https://arxiv.org/abs/1805.05388) with Yingyu Liang, Tengyu Ma, & Brandon Stewart) we give a very simple  and efficient method to induce embeddings for n-grams as well as other rare linguistic features that improves even further. This will be described in a future blog post.
 
 Sample code for constructing and evaluating DisC embeddings is [available](https://github.com/NLPrinceton/text_embedding) as well as [solvers for recreating the sparse recovery results for word embeddings](https://github.com/NLPrinceton/sparse_recovery).
