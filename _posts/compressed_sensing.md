@@ -60,7 +60,7 @@ As our theory predicts, the accuracy of DisC using random word embeddings conver
 Interestingly we also find that DisC using pretrained word embeddings like GloVe converges to BonG performance at much smaller dimensions, an unsurprising but important point that we will discuss next.
 
 <div style="text-align:center;">
-<img src="/assets/imdbperf_uni_bi.png" style="width:300px;" />
+<img src="/assets/imdbperf_uni_bi.png" width = "60%" />
 </div>
 
 
@@ -71,7 +71,7 @@ While compressed sensing theory is a good starting point for understanding the p
 Even though the matrix of embeddings does not satisfy the classical compressed sensing properties, we find that using Basis Pursuit, a sparse recovery approach related to LASSO with provable guarantees for RIP matrices, we can recover bag-of-words information better using GloVe-based text embeddings than from embeddings using random word vectors ( measuring success via the $F_1$-score of the recovered words---higher is better). Note that "Rademacher vectors" are those with entries drawn randomly from $+1,-1$.
 
 <div stype="text-align:center;">
-<img src="/assets/recovery.png" width ="50%" />
+<img src="/assets/recovery.png" width ="60%" />
 </div>
 
 Note that random embeddings are better than pretrained embeddings at recovering words from random word salad (the right-hand image).
