@@ -76,9 +76,14 @@ To do this we prove that the "sensing" matrix $A$ corresponding to DisC embeddin
 The theorem relies upon [compressed sensing results for bounded orthonormal systems](http://www.cis.pku.edu.cn/faculty/vision/zlin/A%20Mathematical%20Introduction%20to%20Compressive%20Sensing.pdf) and says that then the performance of DisC embeddings on linear classification tasks approaches that of BonG vectors as we increase the dimension. 
 Please see our paper for details of the proof.
 
+It is worth noting that our idea of composing objects (words) represented by random vectors to embed structures ($n$-grams) is closely related to ideas in neuroscience studied by [Tony Plate](http://www2.fiit.stuba.sk/~kvasnicka/CognitiveScience/6.prednaska/plate.ieee95.pdf) and [Pentti Kanerva](http://www.rctn.org/vs265/kanerva09-hyperdimensional.pdf).
+Their goal, however, was the recovery of objects and structures using these representations rather than good classification performance.
+Compression of BonG vectors has also been studied by [Paskov et al.](https://papers.nips.cc/paper/4932-compressive-feature-learning.pdf), who computed representations based on classical lossless compression algorithms; their embeddings are still high-dimensional (d > 100K) and quite complicated to implement.
+Our work ties together these ideas of compositionality and compression to give simple representations that also have provable guarantees on linear classification tasks, unlike previous approaches.
+
 ## A surprising lower bound on the power of LSTM-based text representations
 
-The above result also leads to a new theorem about deep learning: *text embeddings computed using low-memory LSTMs should do at least as well as BonG representations on downstream classification tasks*.
+The above result also leads to a new theorem about deep learning: *text embeddings computed using low-memory LSTMs can do at least as well as BonG representations on downstream classification tasks*.
 At first glance this result may seem uninteresting: surely it's no surprise that the field's latest and greatest method is at least as powerful as its oldest? 
 But in practice, most papers on LSTM-based text embeddings make it a point to compare to performance of BonG baseline, and *often are unable to improve upon that baseline*! 
 Thus empirically this new theorem had not been clear at all! 
@@ -97,7 +102,7 @@ Interestingly we also find that DisC using pretrained word embeddings like GloVe
 
 While compressed sensing theory is a good starting point for understanding the power of linear text embeddings, it leaves some mysteries. 
 Using pre-trained embeddings (such as GloVe) in DisC gives higher performance than random embeddings, both in recovering the BonG information out of the text embedding, as well as in downstream tasks. 
-However, pre-trained embeddings do not satisfy any of the nice properties assumed in compressed sensing theory such as RIP, since there are many pairs of words whose embeddings have high inner product.
+However, pre-trained embeddings do not satisfy some of the nice properties assumed in compressed sensing theory such as RIP or incoherence, since there are many pairs of words whose embeddings have high inner product.
 
 Even though the matrix of embeddings does not satisfy these classical compressed sensing properties, we find that using Basis Pursuit, a sparse recovery approach related to LASSO with provable guarantees for RIP matrices, we can recover Bag-of-Words information better using GloVe-based text embeddings than from embeddings using random word vectors (measuring success via the $F_1$-score of the recovered words — higher is better). Here "Rademacher vectors" are those with entries drawn randomly from $\pm1$.
 
