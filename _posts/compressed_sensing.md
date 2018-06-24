@@ -43,7 +43,7 @@ Now we are ready to define our *Distributed Co-occurrence (DisC) embeddings*.
 Note that DisC embeddings leverage classic Bag-of-n-Gram information as well as the power of word embeddings. 
 For instance,  the sentences *"Loved this movie!"* and *"I enjoyed the film."* share no $n$-gram information for any $n$, but  their DisC embeddings are fairly similar. 
 Thus if the first example comes with a label, it gives the learner some idea of how to classify the second. 
-This can be useful especially in settings with few labeled examples; e.g. DisC outperform BonG on the Stanford Sentiment Treebank (SST) task, which has only $6,000$ labeled examples. 
+This can be useful especially in settings with few labeled examples; e.g. DisC outperform BonG on the Stanford Sentiment Treebank (SST) task, which has only 6,000 labeled examples. 
 DisC embeddings also beat SIF and a standard LSTM-based method, Skipthoughts. 
 On the much larger IMDB testbed, BonG still reigns at top (although DisC is not too far behind). 
 
@@ -76,10 +76,11 @@ To do this we prove that the "sensing" matrix $A$ corresponding to DisC embeddin
 The theorem relies upon [compressed sensing results for bounded orthonormal systems](http://www.cis.pku.edu.cn/faculty/vision/zlin/A%20Mathematical%20Introduction%20to%20Compressive%20Sensing.pdf) and says that then the performance of DisC embeddings on linear classification tasks approaches that of BonG vectors as we increase the dimension. 
 Please see our paper for details of the proof.
 
-It is worth noting that our idea of composing objects (words) represented by random vectors to embed structures ($n$-grams) is closely related to ideas in neuroscience studied by [Tony Plate](http://www2.fiit.stuba.sk/~kvasnicka/CognitiveScience/6.prednaska/plate.ieee95.pdf) and [Pentti Kanerva](http://www.rctn.org/vs265/kanerva09-hyperdimensional.pdf).
-Their goal, however, was the recovery of objects and structures using these representations rather than good classification performance.
-Compression of BonG vectors has also been studied by [Paskov et al.](https://papers.nips.cc/paper/4932-compressive-feature-learning.pdf), who computed representations based on classical lossless compression algorithms; their embeddings are still high-dimensional (d > 100K) and quite complicated to implement.
-Our work ties together these ideas of compositionality and compression to give simple representations that also have provable guarantees on linear classification tasks, unlike previous approaches.
+It is worth noting that our idea of composing objects (words) represented by random vectors to embed structures ($n$-grams/documents) is closely related to ideas in neuroscience due to [Tony Plate](http://www2.fiit.stuba.sk/~kvasnicka/CognitiveScience/6.prednaska/plate.ieee95.pdf) and [Pentti Kanerva](http://www.rctn.org/vs265/kanerva09-hyperdimensional.pdf).
+They also were interested in how these objects and structures could be recovered from the representations;
+we take the further step of relating this to performance on a downstream task.
+Text classification over compressed BonG vectors has been proposed before by [Paskov, West, Mitchell, & Hastie](https://papers.nips.cc/paper/4932-compressive-feature-learning.pdf), albeit with a more complicated compression that does not achieve a very low-dimensional representation (d>100,000) due to the use of classical lossless algorithms rather than linear projection.
+Our work ties together these ideas of composition and compression into a simple text representation method with provable guarantees.
 
 ## A surprising lower bound on the power of LSTM-based text representations
 
