@@ -71,15 +71,13 @@ Indeed, we find that so long as we raise the dimension of the word embeddings, t
 This is a surprising result, as compressed sensing does not imply this per se, since the ability to reconstruct the BoW vector from its compressed version doesn't directly imply that the compressed version gives the same performance as BoW on linear classification tasks. 
 However, a result of [Calderbank, Jafarpour, & Schapire](https://pdfs.semanticscholar.org/627c/14fe9097d459b8fd47e8a901694198be9d5d.pdf) shows that the compressed sensing condition that implies optimal recovery also implies good performance on linear classification under compression.
 
-Furthermore, by extending these ideas to the $n$-gram case, we show that our DisC embeddings with random word vectors, which are linear compressions of BonGs, can do as well as them on all linear classification tasks. 
-To do this we prove that the "sensing" matrix $A$ corresponding to DisC embeddings satisfy the  *Restricted Isometry Property (RIP)* introduced in the seminal paper of [Candes & Tao](https://statweb.stanford.edu/~candes/papers/DecodingLP.pdf).
-The theorem relies upon [compressed sensing results for bounded orthonormal systems](http://www.cis.pku.edu.cn/faculty/vision/zlin/A%20Mathematical%20Introduction%20to%20Compressive%20Sensing.pdf) and says that then the performance of DisC embeddings on linear classification tasks approaches that of BonG vectors as we increase the dimension. 
+Furthermore, by extending these ideas to the $n$-gram case, we show that our DisC embeddings computed using random word vectors, which can be seen as a linear compression of the BonG representation, can do as well as the original BonG representation on linear classification tasks. To do this we prove that the "sensing" matrix $A$ corresponding to DisC embeddings satisfy the  *Restricted Isometry Property (RIP)* introduced in the seminal paper of [Candes & Tao](https://statweb.stanford.edu/~candes/papers/DecodingLP.pdf). The theorem relies upon [compressed sensing results for bounded orthonormal systems](http://www.cis.pku.edu.cn/faculty/vision/zlin/A%20Mathematical%20Introduction%20to%20Compressive%20Sensing.pdf) and says that then the performance of DisC embeddings on linear classification tasks approaches that of BonG vectors as we increase the dimension. 
 Please see our paper for details of the proof.
 
-It is worth noting that our idea of composing objects (words) represented by random vectors to embed structures ($n$-grams/documents) is closely related to ideas in neuroscience due to [Tony Plate](http://www2.fiit.stuba.sk/~kvasnicka/CognitiveScience/6.prednaska/plate.ieee95.pdf) and [Pentti Kanerva](http://www.rctn.org/vs265/kanerva09-hyperdimensional.pdf).
+It is worth noting that our idea of composing objects (words) represented by random vectors to embed structures ($n$-grams/documents) is closely related to ideas in neuroscience and neural coding proposed by  [Tony Plate](http://www2.fiit.stuba.sk/~kvasnicka/CognitiveScience/6.prednaska/plate.ieee95.pdf) and [Pentti Kanerva](http://www.rctn.org/vs265/kanerva09-hyperdimensional.pdf).
 They also were interested in how these objects and structures could be recovered from the representations;
-we take the further step of relating this to performance on a downstream task.
-Text classification over compressed BonG vectors has been proposed before by [Paskov, West, Mitchell, & Hastie](https://papers.nips.cc/paper/4932-compressive-feature-learning.pdf), albeit with a more complicated compression that does not achieve a very low-dimensional representation (d>100,000) due to the use of classical lossless algorithms rather than linear projection.
+we take the further step of relating the recoverability to performance on a downstream linear classification task.
+Text classification over compressed BonG vectors has been proposed before by [Paskov, West, Mitchell, & Hastie](https://papers.nips.cc/paper/4932-compressive-feature-learning.pdf), albeit with a more complicated compression that does not achieve a low-dimensional representation (dimension >100,000) due to the use of classical lossless algorithms rather than linear projection.
 Our work ties together these ideas of composition and compression into a simple text representation method with provable guarantees.
 
 ## A surprising lower bound on the power of LSTM-based text representations
@@ -92,8 +90,7 @@ Thus empirically this new theorem had not been clear at all! (One reason could b
 The new theorem follows from considering an LSTM that uses random vectors as word embeddings and computes the DisC embedding in one pass over the text. (For details see our appendix.) 
 
 We empirically tested the effect of dimensionality by measuring performance of DisC on IMDb sentiment classification.
-As our theory predicts, the accuracy of DisC using random word embeddings converges to that of BonGs as dimensionality increases.
-Interestingly we also find that DisC using pretrained word embeddings like GloVe reaches BonG performance at much smaller dimensions, an unsurprising but important point that we will discuss next.
+As our theory predicts, the accuracy of DisC using random word embeddings converges to that of BonGs as dimensionality increases. (In the figure below "Rademacher vectors" are those with entries drawn randomly from $\pm1$.) Interestingly we also find that DisC using pretrained word embeddings like GloVe reaches BonG performance at much smaller dimensions, an unsurprising but important point that we will discuss next.
 
 <div style="text-align:center;">
 <img src="/assets/imdbperf_uni_bi.png" width = "60%" />
@@ -105,7 +102,7 @@ While compressed sensing theory is a good starting point for understanding the p
 Using pre-trained embeddings (such as GloVe) in DisC gives higher performance than random embeddings, both in recovering the BonG information out of the text embedding, as well as in downstream tasks. However, pre-trained embeddings do not satisfy some of the nice properties assumed in compressed sensing theory such as RIP or incoherence, since those properties forbid pairs of words having similar  embeddings.
 
 
-Even though the matrix of embeddings does not satisfy these classical compressed sensing properties, we find that using Basis Pursuit, a sparse recovery approach related to LASSO with provable guarantees for RIP matrices, we can recover Bag-of-Words information better using GloVe-based text embeddings than from embeddings using random word vectors (measuring success via the $F_1$-score of the recovered words — higher is better). Here "Rademacher vectors" are those with entries drawn randomly from $\pm1$.
+Even though the matrix of embeddings does not satisfy these classical compressed sensing properties, we find that using Basis Pursuit, a sparse recovery approach related to LASSO with provable guarantees for RIP matrices, we can recover Bag-of-Words information better using GloVe-based text embeddings than from embeddings using random word vectors (measuring success via the $F_1$-score of the recovered words — higher is better). 
 
 <div stype="text-align:center;">
 <img src="/assets/recovery.png" width ="60%" />
