@@ -87,7 +87,7 @@ Our work ties together these ideas of composition and compression into a simple 
 The above result also leads to a new theorem about deep learning: *text embeddings computed using low-memory LSTMs can do at least as well as BonG representations on downstream classification tasks*.
 At first glance this result may seem uninteresting: surely it's no surprise that the field's latest and greatest method is at least as powerful as its oldest? 
 But in practice, most papers on LSTM-based text embeddings make it a point to compare to performance of BonG baseline, and *often are unable to improve upon that baseline*! 
-Thus empirically this new theorem had not been clear at all! 
+Thus empirically this new theorem had not been clear at all! (One reason could be that our theory requires the random embeddings to be somewhat higher dimensional than the LSTM work had considered.) 
 
 The new theorem follows from considering an LSTM that uses random vectors as word embeddings and computes the DisC embedding in one pass over the text. (For details see our appendix.) 
 
@@ -102,8 +102,8 @@ Interestingly we also find that DisC using pretrained word embeddings like GloVe
 ## Unexplained mystery: higher performance of pretrained word embeddings
 
 While compressed sensing theory is a good starting point for understanding the power of linear text embeddings, it leaves some mysteries. 
-Using pre-trained embeddings (such as GloVe) in DisC gives higher performance than random embeddings, both in recovering the BonG information out of the text embedding, as well as in downstream tasks. 
-However, pre-trained embeddings do not satisfy some of the nice properties assumed in compressed sensing theory such as RIP or incoherence, since there are many pairs of words whose embeddings have high inner product.
+Using pre-trained embeddings (such as GloVe) in DisC gives higher performance than random embeddings, both in recovering the BonG information out of the text embedding, as well as in downstream tasks. However, pre-trained embeddings do not satisfy some of the nice properties assumed in compressed sensing theory such as RIP or incoherence, since those properties forbid pairs of words having similar  embeddings.
+
 
 Even though the matrix of embeddings does not satisfy these classical compressed sensing properties, we find that using Basis Pursuit, a sparse recovery approach related to LASSO with provable guarantees for RIP matrices, we can recover Bag-of-Words information better using GloVe-based text embeddings than from embeddings using random word vectors (measuring success via the $F_1$-score of the recovered words — higher is better). Here "Rademacher vectors" are those with entries drawn randomly from $\pm1$.
 
