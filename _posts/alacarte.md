@@ -17,3 +17,15 @@ These results appear in our [ACL'18 paper](http://aclweb.org/anthology/P18-1002)
 We will also discuss Sanjeev, Yingyu, and Tengyu's [TACL'18 paper](https://transacl.org/ojs/index.php/tacl/article/view/1346) with Yuanzhi Li and Andrej Risteski, which provides the theoretical motivation for our approach.
 
 ## Mathematical background: relating word embeddings and their contexts
+
+We start by assuming a large text corpus $C$, over which we have trained high-quality word embeddings $v_w$. 
+Then for some text feature $f$ (such as a bigram) we want to use these embeddings, together with the contexts $C_f$ that $f$ appears in, to get an embedding $v_f$.
+This simple setup is illustrated below.
+
+<p style="text-align:center;">
+<img src="/assets/alacarte_problem.svg" width="30%"  alt="Problem Setup" />
+</p>
+
+The easiest thing to do here would be to represent $f$ as the average of all the words in its contexts, i.e. 
+
+$$ v_f^\textrm{additive} = \frac{1}{|C_f|}\sum\limits_{\textrm{context }c\in C_f}\frac{1}{|c|}\sum\limits_{\textrm{word }w\in c}v_w $$
