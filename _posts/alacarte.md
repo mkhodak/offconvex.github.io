@@ -23,7 +23,7 @@ Then for some text feature $f$ (such as a bigram) we want to use these embedding
 This simple setup is illustrated below.
 
 <p style="text-align:center;">
-<img src="/assets/alacarte_problem.svg" width="30%"  alt="Problem Setup" />
+<img src="/assets/alacarte_problem.svg" width="50%"  alt="Problem Setup" />
 </p>
 
 The simplest thing to do here would be to represent $f$ as the average of all the words in its contexts, i.e. 
