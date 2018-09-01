@@ -65,11 +65,11 @@ In order to analyze the effect of number of contexts on the quality of induced e
 We compare the performance of our method with the alternatives mentioned above and find that *à la carte* embeddings consistently outperform other methods and requires far fewer contexts to match the best performance of the other methods.
 
 <p style="text-align:center;">
-<img src="/assets/crwplot.pdf" width="50%" />
+<img src="/assets/crwplot.svg" width="50%" />
 </p>
 
 Additionally we evaluate our method on tasks that involve finding reliable embeddings for unseen words and concepts given a single definition or a few sentences of usage for these concepts.
-[Herbelot and Baroni](http://aclweb.org/anthology/D17-1030) considered the [nonce](http://aclweb.org/anthology/D17-1030) and [chimeras](http://clic.cimec.unitn.it/marco/publications/lazaridou-et-al-chimeras-cogsci.pdf) datasets to ``simulate the process by which a competant speaker encounters a new word in known contexts".
+[Herbelot and Baroni](http://aclweb.org/anthology/D17-1030) considered the [nonce](http://aclweb.org/anthology/D17-1030) and [chimeras](http://clic.cimec.unitn.it/marco/publications/lazaridou-et-al-chimeras-cogsci.pdf) datasets to "simulate the process by which a competant speaker encounters a new word in known contexts".
 The definitional nonce dataset consists of single-word concepts and their definitions while the chimeras dataset consists of unseen concepts constructed by combining two related words into a fake nonce word and provides a few sentences containing one of the two component words.
 As evident from the results below, *à la carte* embeddings perform much better than all other methods, including a modification to word2vec developed by Herbelot and Baroni.
 
@@ -86,7 +86,7 @@ A qualitative evaluation of the $n$-gram embeddings is done by finding the close
 As evident from the below figure, *à la carte* bigram embeddings capture the meaning of the phrase better than some other compositional and learned bigram embeddings.
 
 <p style="text-align:center;">
-<img src="/assets/crwplot.pdf" width="50%" />
+<img src="/assets/ngram_quality.png" width="50%" />
 </p>
 
 We also use these $n$-gram embeddings to construct sentence embeddings, similarly to [DisC embeddings](http://www.offconvex.org/2018/06/25/textembeddings/), to evaluate on classification tasks.
@@ -94,7 +94,7 @@ A sentence is embedded as the concatenation of sums of embeddings for $n$-gram i
 Using this simple approach we can match the performance of other linear and LSTM representations, even obtaining state-of-the-art results on some of them.
 
 <p style="text-align:center;">
-<img src="/assets/ngram_clf.pdf" width="50%" />
+<img src="/assets/ngram_clf.png" width="50%" />
 </p>
 
 ## Discussion
