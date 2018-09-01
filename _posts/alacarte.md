@@ -86,7 +86,7 @@ A qualitative evaluation of the $n$-gram embeddings is done by finding the close
 As evident from the below figure, *à la carte* bigram embeddings capture the meaning of the phrase better than some other compositional and learned bigram embeddings.
 
 <p style="text-align:center;">
-<img src="/assets/ngram_quality.png" width="50%" />
+<img src="/assets/ngram_quality.png" width="80%" />
 </p>
 
 We also use these $n$-gram embeddings to construct sentence embeddings, similarly to [DisC embeddings](http://www.offconvex.org/2018/06/25/textembeddings/), to evaluate on classification tasks.
@@ -94,7 +94,7 @@ A sentence is embedded as the concatenation of sums of embeddings for $n$-gram i
 Using this simple approach we can match the performance of other linear and LSTM representations, even obtaining state-of-the-art results on some of them.
 
 <p style="text-align:center;">
-<img src="/assets/ngram_clf.png" width="50%" />
+<img src="/assets/ngram_clf.png" width="80%" />
 </p>
 
 ## Discussion
