@@ -65,7 +65,7 @@ In order to analyze the effect of number of contexts on the quality of induced e
 We compare the performance of our method with the alternatives mentioned above and find that *à la carte* embeddings consistently outperform other methods and requires far fewer contexts to match the best performance of the other methods.
 
 <p style="text-align:center;">
-<img src="/assets/crwplot.svg" width="50%" />
+<img src="/assets/crwplot.svg" width="40%" />
 </p>
 
 Additionally we evaluate our method on tasks that involve finding reliable embeddings for unseen words and concepts given a single definition or a few sentences of usage for these concepts.
@@ -74,7 +74,7 @@ The definitional nonce dataset consists of single-word concepts and their defini
 As evident from the results below, *à la carte* embeddings perform much better than all other methods, including a modification to word2vec developed by Herbelot and Baroni.
 
 <p style="text-align:center;">
-<img src="/assets/nonce_chimeras.png" width="50%" />
+<img src="/assets/nonce_chimeras.png" width="65%" />
 </p>
 
 These experiments suggest the *à la carte* method induces higher quality embeddings for rare words with very few contexts of usage, outperforming both simple methods like SIF and all-but-the-top and more sophisticated methods like word2vec and its modifications.
@@ -86,7 +86,7 @@ A qualitative evaluation of the $n$-gram embeddings is done by finding the close
 As evident from the below figure, *à la carte* bigram embeddings capture the meaning of the phrase better than some other compositional and learned bigram embeddings.
 
 <p style="text-align:center;">
-<img src="/assets/ngram_quality.png" width="80%" />
+<img src="/assets/ngram_quality.png" width="65%" />
 </p>
 
 We also use these $n$-gram embeddings to construct sentence embeddings, similarly to [DisC embeddings](http://www.offconvex.org/2018/06/25/textembeddings/), to evaluate on classification tasks.
