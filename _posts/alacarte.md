@@ -75,7 +75,7 @@ By replacing this competent speaker with a word embedding algorithm, the authors
 As shown in the results below, the embedding *à la carte* induces using the definition is much closer to this true embedding than that produced by other methods, including a modification to word2vec developed by Herbelot and Baroni.
 
 <p style="text-align:center;">
-<img src="/assets/nonce.svg" width="65%" />
+<img src="/assets/nonce.svg" width="40%" />
 </p>
 
 These experiments show that *à la carte* is able to induce high-quality word embeddings from very few uses in context, outperforming both simple methods like SIF and all-but-the-top and more sophisticated methods like word2vec and its modifications.
