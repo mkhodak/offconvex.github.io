@@ -7,7 +7,7 @@ visible:    False
 ---
 
 Recall that distributional methods for capturing meaning, such as word embeddings, almost by definition require observing many examples of words in context.
-On the other hand, people can induce a reasonable meaning for a concept from a single, sufficiently informative sentence, such as the first line of a [Wikipedia entry](https://en.wikipedia.org/wiki/Syzygy_(astronomy): "a *syzygy* is a straight line configuration of three or more celestial bodies in a gravitational system."
+On the other hand, people can induce a reasonable meaning for a concept from a single, sufficiently informative sentence, such as the first line of a [Wikipedia entry](https://en.wikipedia.org/wiki/Syzygy_(astronomy)): "a *syzygy* is a straight line configuration of three or more celestial bodies in a gravitational system."
 Can we devise an algorithm that can do the same?
 
 In this blog we describe a simple, principled, but effective method for inducing embeddings of rare words from just a few examples in context.
