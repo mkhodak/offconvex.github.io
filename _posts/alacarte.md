@@ -1,24 +1,22 @@
 ---
 layout:     post
-title:      Simple and efficient semantic embeddings for any language feature
+title:      Simple and efficient semantic embeddings for rare words, n-grams, and any other language feature
 date:       2018-09-01 10:00:00
 author:     Sanjeev Arora, Mikhail Khodak, Nikunj Saunshi
 visible:    False
 ---
 
-In this blog we broaden our recent discussion of deep-learning-free text embeddings (see our [previous post](http://www.offconvex.org/2018/06/25/textembeddings/)) to include simple but principled embeddings for arbitrary language features.
-As with modern semantic word vectors, our method is rooted in Firth's [distributional hypothesis](https://en.wikipedia.org/wiki/Distributional_semantics), "you shall know a word by the company it keeps."
-Under this view each word's embedding can be seen as a concise representation of the distribution of *other* words occurring in the same context (see also [Sanjeev's post](http://www.offconvex.org/2015/12/12/word-embeddings-1/) on the topic). 
-By making a shallow extension of this hypothesis, e.g. "you shall know a bigram/sense/entity by the company it keeps," our *à la carte* approach allows us to pick out exactly those features required by a downstream task and embed only them.
-We can then embed them using only the pretrained vectors of words that occur next to them in a large text corpus plus a linear regression step.
+Recall that distributional methods for capturing meaning, such as word embeddings, almost by definition require observing many examples of words in context.
+On the other hand, people can induce a reasonable meaning for a concept from a single, sufficiently informative sentence, such as the first line of a [Wikipedia entry](https://en.wikipedia.org/wiki/Syzygy_(astronomy): "a *syzygy* is a straight line configuration of three or more celestial bodies in a gravitational system."
+Can we devise an algorithm that can do the same?
 
-Despite this simplicity, *à la carte* embedding leads to state-of-the-art results on several document classsification tasks and for one-shot learning of word embeddings.
-These results appear in our [ACL'18 paper](http://aclweb.org/anthology/P18-1002) with Yingyu Liang, Tengyu Ma, and Brandon Stewart.
-The discussion will also highlight Sanjeev, Yingyu, and Tengyu's [TACL'18 paper](https://transacl.org/ojs/index.php/tacl/article/view/1346) with Yuanzhi Li and Andrej Risteski, which provides the theoretical motivation for our approach.
+In this blog we describe a simple, principled, but effective method for inducing embeddings of rare words from just a few examples in context.
+This *à la carte* approach, described in our [ACL'18 paper](http://aclweb.org/anthology/P18-1002) with Yingyu Liang, Tengyu Ma, and Brandon Stewart, easily extends to learning embeddings of arbitrary language features such as word-senses and n-grams. 
+Combined these with our recent [deep-learning-free text embeddings](http://www.offconvex.org/2018/06/25/textembeddings/) leads to state-of-the-art results on several document classification tasks as well.
 
-## Mathematical background: relating word embeddings and their contexts
+## Relating word embeddings and their contexts
 
-We start by assuming a large text corpus $C$, over which we have trained high-quality word embeddings $v_w$. 
+We start by assuming a large text corpus $C$, over which we have trained high-quality word embeddings $v_w$.
 Then for some text feature $f$ (such as a bigram) we want to use these embeddings, together with the contexts $C_f$ that $f$ appears in, to get an embedding $v_f$.
 This simple setup is illustrated below.
 
