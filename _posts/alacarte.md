@@ -101,6 +101,8 @@ Using this simple approach we can match the performance of other linear and LSTM
 
 Apart from its simplicity and computational efficiency, the versatility of *à la carte* method allows us to induce embeddings for all kinds of linguistic features, as long as there is at least one usage of the feature in a context of words.
 As the name promises, this method avoids the *prix fixe* cost of having to learn embeddings for all features at the same time and lets us embed only features of interest.
-Despite its simplicity, our method is competitive with many other feature embedding methods and also beats them in many cases.
+Despite this, our method is competitive with many other feature embedding methods and also beats them in many cases.
 One issue that still needs tackling, however, is zero-shot learning of word embeddings i.e. inducing embeddings for a words/features without any context.
 Compositional methods, including those using character level information such as [fastText](https://fasttext.cc/), have been successful at zero-shot learning of word embeddings and incorporating these ideas into the *à la carte* approach might be worth looking into.
+
+We have made [available](https://github.com/NLPrinceton/ALaCarte) code for applying *à la carte* embedding, including to re-create the results described.
