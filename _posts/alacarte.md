@@ -12,7 +12,7 @@ Can we devise an algorithm that can do the same?
 
 In this blog we describe a simple, principled, but effective method for inducing embeddings of rare words from just a few examples in context.
 This *à la carte* approach, described in our [ACL'18 paper](http://aclweb.org/anthology/P18-1002) with Yingyu Liang, Tengyu Ma, and Brandon Stewart, easily extends to learning embeddings of arbitrary language features such as word-senses and n-grams. 
-Combined these with our recent [deep-learning-free text embeddings](http://www.offconvex.org/2018/06/25/textembeddings/) leads to state-of-the-art results on several document classification tasks as well.
+Combining these with our recent [deep-learning-free text embeddings](http://www.offconvex.org/2018/06/25/textembeddings/) leads to state-of-the-art results on several document classification tasks as well.
 
 ## Relating word embeddings and their contexts
 
