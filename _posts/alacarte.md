@@ -79,7 +79,7 @@ A sentence is embedded as the concatenation of sums of embeddings for $n$-gram i
 Using this simple approach we can match the performance of other linear and LSTM representations, even obtaining state-of-the-art results on some of them.
 
 <p style="text-align:center;">
-<img src="/assets/ngram_clf.png" width="80%" />
+<img src="/assets/ngram_clf.svg" width="80%" />
 </p>
 
 ## Discussion
