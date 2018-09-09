@@ -20,7 +20,8 @@ We formalize our goal of finding an algorithm that can induce a word's meaning f
 First, in order the represent the context sequence $c$, [recall](http://www.offconvex.org/2016/02/14/word-embeddings-2/) that, for GloVe-like embeddings, the *maximum a posteriori* estimate of the embedding of $c$ is the average over the embeddings of all words in $w'\in c$.
 We can construct such a context vector for rare words because we usually have high-quality embeddings of most of its surrounding tokens.
 
-We now make the simple supposition that there exists some general linear transform $A$ between this context vector and the word embedding $v_w$, i.e. that $v_w\approx A\left(\sum_{w'\in c}v_{w'}\right)$ .
+Now suppose that there exists some general linear transform $A$ between this context vector and the word embedding $v_w$, i.e. that $v_w\approx A\left(\sum_{w'\in c}v_{w'}\right)$ .
+We call this transformed context vector the  *à la carte* embedding of $w$, so called because given a matrix $A$ it is near-effortless to learn an embedding of any desired word (and later, any feature) without paying the *prix fixe* of full-corpus training.
 While seemingly simple, using a linear transform subsumes several other ways of getting good context representations, such as removing the [top singular component or down-weighting frequent directions](http://www.offconvex.org/2018/06/17/textembeddings/).
 Furthermore, for frequent words we find that vectors induced using the best linear transform of their average context vector in a corpus have cosine similarity $>0.9$ with their true word embeddings.
 The latter finding also shows a simple way of learning $A$: linear regression over sets $C_w$ containing all contexts of frequent words $w$ in a large text corpus:
@@ -47,7 +48,7 @@ As shown in the results below, the embedding *à la carte* induces using the def
 
 These experiments show that *à la carte* is able to induce high-quality word embeddings from very few uses in context, outperforming both simple methods like SIF and all-but-the-top and more sophisticated methods like word2vec and its modifications.
 
-##  Embeddings of general features
+##  A theory of induced embeddings for general features
 
 Should we expect there to be a linear transformation between embeddings of words $v_w$ and average embeddings of *contexts* of $w$?
 For GloVe-like embeddings, the answer turns out to be *yes* (and empirically for word2vec as well).
