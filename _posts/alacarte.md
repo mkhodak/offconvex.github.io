@@ -29,6 +29,7 @@ The latter finding also shows a simple way of learning $A$: linear regression ov
 
 $$ A=\arg\min\sum\limits_w\left\|v_w-A\sum\limits_{c\in C_w}\sum\limits_{w'\in c}v_{w'}\right\|_2^2 $$
 
+### Rare word embeddings ###
 We put this method to the test by checking how well we can induce embeddings for words with just one or a few occurrences in context.
 The performance of standard word embedding methods is known to degrade in such low frequency settings.
 In order to analyze the effect of number of contexts on the quality of induced embeddings we created the *[Contextual Rare Words](http://nlp.cs.princeton.edu/CRW/)* dataset (a subset of the [Rare Words](https://nlp.stanford.edu/~lmthang/morphoNLM/) dataset) where, along with word pairs and human-rated scores, we also provide contexts for the rare words.
@@ -68,6 +69,7 @@ $$ v_w=A\mathbb{E}v_w^\textrm{avg}=A\mathbb{E}\left[v_\textrm{clothing}^\textrm{
 
 This equation also shows that we can get a reasonable estimate for the vector of the sense *clothing*, and, by extension many other features of interest, by setting $v_\textrm{clothing}=A\mathbb{E}v_\textrm{clothing}^\textrm{avg}$.
 
+### $n$-gram embeddings ###
 While the theory suggests existence of a linear transform between word embeddings and their context embeddings, one could use this linear transform to induce embeddings for other kinds of linguistic features in context.
 We test this hypothesis by inducing embeddings for $n$-grams by using contexts from a large text corpus and word embeddings trained on the same corpus.
 A qualitative evaluation of the $n$-gram embeddings is done by finding the closest words to it in terms of cosine similarity between the embeddings.
@@ -77,6 +79,7 @@ As evident from the below figure, *à la carte* bigram embeddings capture the me
 <img src="/assets/ngram_quality.png" width="65%" />
 </p>
 
+### Sentence embeddings ###
 We also use these $n$-gram embeddings to construct sentence embeddings, similarly to [DisC embeddings](http://www.offconvex.org/2018/06/25/textembeddings/), to evaluate on classification tasks.
 A sentence is embedded as the concatenation of sums of embeddings for $n$-gram in the sentence for use in downstream classification tasks.
 Using this simple approach we can match the performance of other linear and LSTM representations, even obtaining state-of-the-art results on some of them.
