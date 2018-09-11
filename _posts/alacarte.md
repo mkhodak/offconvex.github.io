@@ -40,8 +40,10 @@ We compare the performance of our method with the alternatives mentioned above a
 </p>
 
 Additionally we evaluate our method on tasks that involve finding reliable embeddings for unseen words and concepts given a single definition or a few sentences of usage for these concepts.
-To "simulate the process by which a competent speaker encounters a new word in known contexts," [Herbelot and Baroni](http://aclweb.org/anthology/D17-1030) constructed a "nonce" dataset consisting of single-word concepts and their definitions.
-By replacing this competent speaker with a word embedding algorithm, the authors proposed an evaluation in which the embedding it produces using the definition is compared to a ground truth embedding obtained by full-corpus training.
+To "simulate the process by which a competent speaker encounters a new word in known contexts," [Herbelot and Baroni](http://aclweb.org/anthology/D17-1030) constructed a "nonce" dataset consisting of single-word concepts and their Wikipedia definitions.
+By replacing this competent speaker with a word embedding algorithm, the authors proposed an evaluation in which the embedding it produces using this definition is compared to a ground truth embedding obtained by full-corpus training.
+Note that this is a straightforward formulation of the task we described at the beginning of the post.
+
 As shown in the results below, the embedding *à la carte* induces using the definition is much closer to this true embedding than that produced by other methods, including a modification to word2vec developed by Herbelot and Baroni.
 
 <p style="text-align:center;">
