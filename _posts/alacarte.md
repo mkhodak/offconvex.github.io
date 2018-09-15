@@ -6,15 +6,14 @@ author:     Sanjeev Arora, Mikhail Khodak, Nikunj Saunshi
 visible:    False
 ---
 
-Distributional methods for capturing meaning, such as word embeddings, often require observing many examples of words in context. But most humans can infer a reasonable meaning from very few or even a single occurence. For instance, that a Porgy is probably a fish if we read "Porgies live in shallow temperate marine waters." There is great interest in developing this capability in NLP algorithms. 
+Distributional methods for capturing meaning, such as word embeddings, often require observing many examples of words in context. But most humans can infer a reasonable meaning from very few or even a single occurence. For instance, that a Porgy is probably a fish if we read "Porgies live in shallow temperate marine waters." There is great interest in developing this capability in NLP algorithms, since language corpora often have a long tail of "rare words." 
 
-Here we describe a simple, principled, but effective method, the *à la carte* approach, described in our [ACL'18 paper](http://aclweb.org/anthology/P18-1002) with Yingyu Liang, Tengyu Ma, and Brandon Stewart. It also easily extends to learning embeddings of arbitrary language features such as word-senses and n-grams. The paper also combines these with our recent [deep-learning-free text embeddings](http://www.offconvex.org/2018/06/25/textembeddings/) to get simple deep-learning free text embeddings with almost state of the art performance on downstream classification tasks. (See also a previous [blog post](http://www.offconvex.org/2018/06/25/textembeddings/).)
+Here we describe a simple but principled method for this, the *à la carte* approach, described in our [ACL'18 paper](http://aclweb.org/anthology/P18-1002) with Yingyu Liang, Tengyu Ma, and Brandon Stewart. It also easily extends to learning embeddings of arbitrary language features such as word-senses and n-grams. The paper also combines these with our recent [deep-learning-free text embeddings](http://www.offconvex.org/2018/06/25/textembeddings/) to get simple deep-learning free text embeddings with almost state of the art performance on downstream classification tasks. (See also a previous [blog post](http://www.offconvex.org/2018/06/25/textembeddings/).)
 
 ## Relating word embeddings and their contexts
 
 We formalize our goal of finding an algorithm that can induce a word's meaning from context as the task of learning a mapping from a sequence $c$ of words surrounding a word $w$ to its word embedding $v_w$. 
-First, in order the represent the context sequence $c$, [recall](http://www.offconvex.org/2016/02/14/word-embeddings-2/) that, for GloVe-like embeddings, the *maximum a posteriori* estimate of the embedding of $c$ is the average $v_w^\textrm{avg}$ over the embeddings of all words $w'\in c$.
-We can construct such a context vector for rare words because we usually have high-quality embeddings of most of its surrounding tokens.
+We are going to represent  context sequence $c$, using the average $v_w^\textrm{avg}$ over the embeddings of all words $w'\in c$. (For a justification  see the [earlier blog post](http://www.offconvex.org/2016/02/14/word-embeddings-2/).) 
 
 We postulate that there exists an unknown but fixed linear transform $A$ between this context vector and the word embedding $v_w$, i.e. that $v_w\approx Av_w^\textrm{avg}$ .
 The existence of a linear transform $A$ is in fact theoretically justified and we will elaborate on this later in the post.
