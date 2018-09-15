@@ -16,18 +16,14 @@ Suppose a single occurence of a word $w$ is surrounded by a sequence $c$ of word
 
 > **Guess 1:** The famous word2vec method suggests that $u_c$ is (up to scaling) a good estimate for $v_w$.
 
-Unfortunately, this totally fails. Taking such estimates from even thousands of occurences of $w$, the average  does not converge anywhere close to the ground truth embedding $v_w$. The following is a new discovery
+Unfortunately, this totally fails. Even taking thousands of occurences of $w$, the average of such estimates  stays far from the ground truth embedding $v_w$. The following is a surprising new discovery (A theoretical justification appears later):
 
-> [Sanjeev,Yingyu and Tengyu]() For each text corpus there is a matrix $A$  such that $A u_c$ is a good estimate for $v_w$. Note that if we already know word embeddings for many words, then the best such  $A$ is easy to find via linear regression by minimizing the average $|Au_c -v_w|_2^2 $ over occurences for such words. 
+> [TACL'18 paper]() For each text corpus there is a matrix $A$  such that $A u_c$ is a good estimate for $v_w$. Note that the best such  $A$ can be found via linear regression by minimizing the average $|Au_c -v_w|_2^2 $ over occurences for frequent words, for which we already have word embeddings.  
 
-This actually works! A theoretical justification appears later, but experimentally it is found that for frequent words $w$ the average of such induced embeddings from their appearances in the corpus have cosine similarity $>0.9$ with their true word embeddings. (The level of agreement varies a bit between GloVe, word2vec etc. a bit.) 
+Experimentally this works well. For frequent words $w$ the average of such induced embeddings from their appearances in the corpus have converges to a vector with cosine similarity $>0.9$ with their true word embedding $v_w$. (This holds for embeddings from standard methods.)
 
+Thus the learnt $A$ gives a way to induce embeddings for any rare word or new from a single or few occurences, and we call this the   *à la carte* embedding of $w$,  because we don't need to pay  the *prix fixe* of re-running GloVe or word2vec on the entire corpus. 
 
-We call this transformed context vector the  *à la carte* embedding of $w$, so called because given a matrix $A$ it is near-effortless to learn an embedding of any desired word (and later, any feature) without paying the *prix fixe* of full-corpus training.
-Furthermore, for frequent words we find that vectors induced using the best linear transform of their average context vector in a corpus have cosine similarity $>0.9$ with their true word embeddings.
-The latter finding also shows a simple way of learning $A$: linear regression over sets $C_w$ containing all contexts of frequent words $w$ in a large text corpus:
-
-$$ A=\arg\min\sum\limits_w\left\|v_w-A\sum\limits_{c\in C_w}\sum\limits_{w'\in c}v_{w'}\right\|_2^2 $$
 
 ### Rare word embeddings ###
 We put this method to the test by checking how well we can induce embeddings for words with just one or a few occurrences in context.
