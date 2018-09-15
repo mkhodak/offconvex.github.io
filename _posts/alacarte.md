@@ -16,7 +16,7 @@ Suppose a single occurence of a word $w$ is surrounded by a sequence $c$ of word
 
 > **Guess 1:** Up to scaling, $u_c$ is  a good estimate for $v_w$.
 
-Unfortunately, this totally fails. Even taking thousands of occurences of $w$, the average of such estimates  stays far from the ground truth embedding $v_w$. The following is a surprising new discovery (A theoretical justification appears later):
+Unfortunately, this totally fails. Even taking thousands of occurences of $w$, the average of such estimates  stays far from the ground truth embedding $v_w$. The following is a new discovery should therefore be surprising. (Read below for a theoretical justification):
 
 > [TACL'18 paper]() For each text corpus there is a matrix $A$  such that $A u_c$ is a good estimate for $v_w$. Note that the best such  $A$ can be found via linear regression by minimizing the average $|Au_c -v_w|_2^2 $ over occurences for frequent words, for which we already have word embeddings.  
 
