@@ -20,9 +20,9 @@ Unfortunately, this totally fails. Even taking thousands of occurences of $w$, t
 
 > [TACL'18 paper]() For each text corpus there is a matrix $A$  such that $A u_c$ is a good estimate for $v_w$. Note that the best such  $A$ can be found via linear regression by minimizing the average $|Au_c -v_w|_2^2 $ over occurences for frequent words, for which we already have word embeddings.  
 
-Experimentally this works well. For frequent words $w$ the average of such induced embeddings from their appearances in the corpus have converges to a vector with cosine similarity $>0.9$ with their true word embedding $v_w$. (This holds for embeddings from standard methods.)
+Once such an $A$ has been learnt from frequent words, the induction of embeddings for new words works very well. As we receive more and more occurences of  $w$ the average of $Au_c$ over all sentences containing $w$  has cosine similarity $>0.9$ with the true word embedding $v_w$. (This holds for GloVe as well as word2vec.)
 
-Thus the learnt $A$ gives a way to induce embeddings for any rare word or new from a single or few occurences, and we call this the   *à la carte* embedding of $w$,  because we don't need to pay  the *prix fixe* of re-running GloVe or word2vec on the entire corpus. 
+Thus the learnt $A$ gives us a way to induce embeddings for any rare word from a few or even a single occurence, and we call this the   *à la carte* embedding of $w$,  because we don't need to pay  the *prix fixe* of re-running GloVe or word2vec on the entire corpus. 
 
 
 ### Testing embeddings for rare words ###
