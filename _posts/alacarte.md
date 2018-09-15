@@ -6,7 +6,7 @@ author:     Sanjeev Arora, Mikhail Khodak, Nikunj Saunshi
 visible:    False
 ---
 
-Distributional methods for capturing meaning, such as word embeddings, often require observing many examples of words in context. But most humans can infer a reasonable meaning from very few or even a single occurence. For instance,  if we read "Porgies live in shallow temperate marine waters," we have a good idea that Porgy is a fish. It is an interesting task to develop a similar capability in NLP algorithms, since language corpora often have a long tail of "rare words." 
+Distributional methods for capturing meaning, such as word embeddings, often require observing many examples of words in context. But most humans can infer a reasonable meaning from very few or even a single occurence. For instance,  if we read "Porgies live in shallow temperate marine waters," we have a good idea that Porgy is a fish. Since language corpora often have a long tail of "rare words," it is an interesting problem to imbue NLP algorithms with this capability.  
 
 Here we describe a simple but principled approach called *à la carte* embeddings, described in our [ACL'18 paper](http://aclweb.org/anthology/P18-1002) with Yingyu Liang, Tengyu Ma, and Brandon Stewart. It also easily extends to learning embeddings of arbitrary language features such as word-senses and n-grams. The paper also combines these with our recent [deep-learning-free text embeddings](http://www.offconvex.org/2018/06/25/textembeddings/) to get simple deep-learning free text embeddings with even better performance on downstream classification tasks, quite competitive with deep learning approaches.
 
