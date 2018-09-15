@@ -12,15 +12,17 @@ Here we describe a simple but principled method for this, the *à la carte* appr
 
 ## Inducing word embedding from their contexts: a surprising linear relationship
 
-Suppose a single occurence of a word $w$ is surrounded by a sequence $c$ of words. What is a reasonable guess for the word embedding $v_w$  of $w$? 
+Suppose a single occurence of a word $w$ is surrounded by a sequence $c$ of words. What is a reasonable guess for the word embedding $v_w$  of $w$? For convenience, we will let $u_c$ denote the  average of the word embeddings of words in $c$.
+
+> **Guess 1:** The famous word2vec method suggests that $u_c$ is (up to scaling) a good estimate for $v_w$.
+
+Unfortunately, this totally fails. Taking such estimates from even thousands of occurences of $w$, the average  does not converge anywhere close to the ground truth embedding $v_w$. The following is a new discovery
+
+> [Sanjeev,Yingyu and Tengyu]() For each text corpus there is a matrix $A$  such that $A u_c$ is a good estimate for $v_w$. Note that if we already know word embeddings for many words, then the best such  $A$ is easy to find via linear regression by minimizing the average $|Au_c -v_w|_2^2 $ over occurences for such words. 
+
+This actually works! A theoretical justification appears later, but experimentally it is found that for frequent words $w$ the average of such induced embeddings from their appearances in the corpus have cosine similarity $>0.9$ with their true word embeddings. (The level of agreement varies a bit between GloVe, word2vec etc. a bit.) 
 
 
-The famous word2vec method seems to suggest that a good guess could be surrounding a word $w$ to its word embedding $v_w$. 
-We are going to represent  context sequence $c$, using the average $v_w^\textrm{avg}$ over the embeddings of all words $w'\in c$. (For a justification  see the [earlier blog post](http://www.offconvex.org/2016/02/14/word-embeddings-2/).) 
-
-We postulate that there exists an unknown but fixed linear transform $A$ between this context vector and the word embedding $v_w$, i.e. that $v_w\approx Av_w^\textrm{avg}$ .
-The existence of a linear transform $A$ is in fact theoretically justified and we will elaborate on this later in the post.
-While seemingly simple, using a linear transform also subsumes several other ways of getting good context representations, such as removing the [top singular component or down-weighting frequent directions](http://www.offconvex.org/2018/06/17/textembeddings/).
 We call this transformed context vector the  *à la carte* embedding of $w$, so called because given a matrix $A$ it is near-effortless to learn an embedding of any desired word (and later, any feature) without paying the *prix fixe* of full-corpus training.
 Furthermore, for frequent words we find that vectors induced using the best linear transform of their average context vector in a corpus have cosine similarity $>0.9$ with their true word embeddings.
 The latter finding also shows a simple way of learning $A$: linear regression over sets $C_w$ containing all contexts of frequent words $w$ in a large text corpus:
@@ -68,7 +70,7 @@ Assuming for simplicity that $tie$ only has two meanings (*clothing* and *game*)
 $$ v_w=A\mathbb{E}v_w^\textrm{avg}=A\mathbb{E}\left[v_\textrm{clothing}^\textrm{avg}+v_\textrm{game}^\textrm{avg}\right]=A\mathbb{E}v_\textrm{clothing}^\textrm{avg}+A\mathbb{E}v_\textrm{game}^\textrm{avg} $$
 
 This equation also shows that we can get a reasonable estimate for the vector of the sense *clothing*, and, by extension many other features of interest, by setting $v_\textrm{clothing}=A\mathbb{E}v_\textrm{clothing}^\textrm{avg}$.
-
+(Note that this linear method ocontext representations, such as removing the [top singular component or down-weighting frequent directions](http://www.offconvex.org/2018/06/17/textembeddings/).
 ### $n$-gram embeddings ###
 While the theory suggests existence of a linear transform between word embeddings and their context embeddings, one could use this linear transform to induce embeddings for other kinds of linguistic features in context.
 We test this hypothesis by inducing embeddings for $n$-grams by using contexts from a large text corpus and word embeddings trained on the same corpus.
