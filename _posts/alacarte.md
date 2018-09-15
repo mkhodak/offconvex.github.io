@@ -10,9 +10,12 @@ Distributional methods for capturing meaning, such as word embeddings, often req
 
 Here we describe a simple but principled method for this, the *à la carte* approach, described in our [ACL'18 paper](http://aclweb.org/anthology/P18-1002) with Yingyu Liang, Tengyu Ma, and Brandon Stewart. It also easily extends to learning embeddings of arbitrary language features such as word-senses and n-grams. The paper also combines these with our recent [deep-learning-free text embeddings](http://www.offconvex.org/2018/06/25/textembeddings/) to get simple deep-learning free text embeddings with almost state of the art performance on downstream classification tasks. (See also a previous [blog post](http://www.offconvex.org/2018/06/25/textembeddings/).)
 
-## Relating word embeddings and their contexts
+## Inducing word embedding from their contexts: a surprising linear relationship
 
-We formalize our goal of finding an algorithm that can induce a word's meaning from context as the task of learning a mapping from a sequence $c$ of words surrounding a word $w$ to its word embedding $v_w$. 
+Suppose a single occurence of a word $w$ is surrounded by a sequence $c$ of words. What is a reasonable guess for the word embedding $v_w$  of $w$? 
+
+
+The famous word2vec method seems to suggest that a good guess could be surrounding a word $w$ to its word embedding $v_w$. 
 We are going to represent  context sequence $c$, using the average $v_w^\textrm{avg}$ over the embeddings of all words $w'\in c$. (For a justification  see the [earlier blog post](http://www.offconvex.org/2016/02/14/word-embeddings-2/).) 
 
 We postulate that there exists an unknown but fixed linear transform $A$ between this context vector and the word embedding $v_w$, i.e. that $v_w\approx Av_w^\textrm{avg}$ .
