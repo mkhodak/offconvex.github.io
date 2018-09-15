@@ -12,9 +12,9 @@ Here we describe a simple but principled approach called *à la carte* embedding
 
 ## Inducing word embedding from their contexts: a surprising linear relationship
 
-Suppose a single occurence of a word $w$ is surrounded by a sequence $c$ of words. What is a reasonable guess for the word embedding $v_w$  of $w$? For convenience, we will let $u_c$ denote the  average of the word embeddings of words in $c$.
+Suppose a single occurence of a word $w$ is surrounded by a sequence $c$ of words. What is a reasonable guess for the word embedding $v_w$  of $w$? For convenience, we will let $u_c$ denote the  average of the word embeddings of words in $c$. Anybody who knows the word2vec method may reasonably guess the following.
 
-> **Guess 1:** Up to scaling, $u_c$ is  a good estimate for $v_w$ (as suggested by the word2vec method). 
+> **Guess 1:** Up to scaling, $u_c$ is  a good estimate for $v_w$.
 
 Unfortunately, this totally fails. Even taking thousands of occurences of $w$, the average of such estimates  stays far from the ground truth embedding $v_w$. The following is a surprising new discovery (A theoretical justification appears later):
 
