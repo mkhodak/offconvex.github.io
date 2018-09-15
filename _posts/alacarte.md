@@ -22,7 +22,7 @@ Unfortunately, this totally fails. Even taking thousands of occurences of $w$, t
 
 Once such an $A$ has been learnt from frequent words, the induction of embeddings for new words works very well. As we receive more and more occurences of  $w$ the average of $Au_c$ over all sentences containing $w$  has cosine similarity $>0.9$ with the true word embedding $v_w$. (This holds for GloVe as well as word2vec.)
 
-Thus the learnt $A$ gives us a way to induce embeddings for any rare word from a few or even a single occurence, and we call this the   *à la carte* embedding of $w$,  because we don't need to pay  the *prix fixe* of re-running GloVe or word2vec on the entire corpus. 
+Thus the learnt $A$ gives a way to induce embeddings for new words from a few or even a single occurence. We call this the   *à la carte* embedding of $w$,  because we don't need to pay  the *prix fixe* of re-running GloVe or word2vec on the entire corpus each time a new word is found. 
 
 
 ### Testing embeddings for rare words ###
