@@ -25,28 +25,23 @@ Experimentally this works well. For frequent words $w$ the average of such induc
 Thus the learnt $A$ gives a way to induce embeddings for any rare word or new from a single or few occurences, and we call this the   *à la carte* embedding of $w$,  because we don't need to pay  the *prix fixe* of re-running GloVe or word2vec on the entire corpus. 
 
 
-### Rare word embeddings ###
-We put this method to the test by checking how well we can induce embeddings for words with just one or a few occurrences in context.
-The performance of standard word embedding methods is known to degrade in such low frequency settings.
-In order to analyze the effect of number of contexts on the quality of induced embeddings we created the *[Contextual Rare Words](http://nlp.cs.princeton.edu/CRW/)* dataset (a subset of the [Rare Words](https://nlp.stanford.edu/~lmthang/morphoNLM/) dataset) where, along with word pairs and human-rated scores, we also provide contexts for the rare words.
+### Testing embeddings for rare words ###
+Using the [Rare Words](https://nlp.stanford.edu/~lmthang/morphoNLM/) dataset we created the 
+[*Contextual Rare Words*](http://nlp.cs.princeton.edu/CRW/)* dataset where, along with word pairs and human-rated scores, we also provide contexts (i.e., few usages) for the rare words.
+
 We compare the performance of our method with the alternatives mentioned above and find that *à la carte* embedding consistently outperforms other methods and requires far fewer contexts to match their best performance.
 
 <p style="text-align:center;">
 <img src="/assets/crwplot.svg" width="40%" />
 </p>
 
-Additionally we evaluate our method on tasks that involve finding reliable embeddings for unseen words and concepts given a single definition or a few sentences of usage for these concepts.
-To "simulate the process by which a competent speaker encounters a new word in known contexts," [Herbelot and Baroni](http://aclweb.org/anthology/D17-1030) constructed a "nonce" dataset consisting of single-word concepts and their Wikipedia definitions.
-By replacing this competent speaker with a word embedding algorithm, the authors proposed an evaluation in which the embedding it produces using this definition is compared to a ground truth embedding obtained by full-corpus training.
-Note that this is a straightforward formulation of the task we described at the beginning of the post.
 
-As shown in the results below, the embedding *à la carte* induces using the definition is much closer to this true embedding than that produced by other methods, including a modification to word2vec developed by Herbelot and Baroni.
+Now we turn to the task mentioned in the opening para of this post. [Herbelot and Baroni](http://aclweb.org/anthology/D17-1030) constructed a "nonce" dataset consisting of single-word concepts and their Wikipedia definitions, to test algorithms that "simulate the process by which a competent speaker encounters a new word in known contexts." They tested various methods, including a modified version of word2vec,  and  the *à la carte* embedding outperforms all their methods. 
 
 <p style="text-align:center;">
 <img src="/assets/nonce.svg" width="40%" />
 </p>
 
-These experiments show that *à la carte* is able to induce high-quality word embeddings from very few uses in context, outperforming both simple methods like SIF and all-but-the-top and more sophisticated methods like word2vec and its modifications.
 
 ##  A theory of induced embeddings for general features
 
