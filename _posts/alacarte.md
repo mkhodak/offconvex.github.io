@@ -12,15 +12,15 @@ Here we describe a simple but principled approach called *à la carte* embedding
 
 ## Inducing word embedding from their contexts: a surprising linear relationship
 
-Suppose a single occurence of a word $w$ is surrounded by a sequence $c$ of words. What is a reasonable guess for the word embedding $v_w$  of $w$? For convenience, we will let $u_c$ denote the  average of the word embeddings of words in $c$. Anybody who knows the word2vec method may reasonably guess the following.
+Suppose a single occurence of a word $w$ is surrounded by a sequence $c$ of words. What is a reasonable guess for the word embedding $v_w$  of $w$? For convenience, we will let $u_w^c$ denote the  average of the word embeddings of words in $c$. Anybody who knows the word2vec method may reasonably guess the following.
 
-> **Guess 1:** Up to scaling, $u_c$ is  a good estimate for $v_w$.
+> **Guess 1:** Up to scaling, $u_w^c$ is  a good estimate for $v_w$.
 
 Unfortunately, this totally fails. Even taking thousands of occurences of $w$, the average of such estimates  stays far from the ground truth embedding $v_w$. The following discovery should therefore be surprising (read below for a theoretical justification):
 
-> [**Theorem 1**](https://transacl.org/ojs/index.php/tacl/article/view/1346): There is a single matrix $A$ (depending only upon the text corpus)  such that $A u_c$ is a good estimate for $v_w$. Note that the best such  $A$ can be found via linear regression by minimizing the average $|Au_c -v_w|_2^2 $ over occurrences of frequent words $w$, for which we already have word embeddings.  
+> [**Theorem 1**](https://transacl.org/ojs/index.php/tacl/article/view/1346): There is a single matrix $A$ (depending only upon the text corpus)  such that $A u_w^c$ is a good estimate for $v_w$. Note that the best such  $A$ can be found via linear regression by minimizing the average $|Au_w^c -v_w|_2^2 $ over occurrences of frequent words $w$, for which we already have word embeddings.  
 
-Once such an $A$ has been learnt from frequent words, the induction of embeddings for new words works very well. As we receive more and more occurences of  $w$ the average of $Au_c$ over all sentences containing $w$  has cosine similarity $>0.9$ with the true word embedding $v_w$ (this holds for GloVe as well as word2vec).
+Once such an $A$ has been learnt from frequent words, the induction of embeddings for new words works very well. As we receive more and more occurences of  $w$ the average of $Au_w^c$ over all sentences containing $w$  has cosine similarity $>0.9$ with the true word embedding $v_w$ (this holds for GloVe as well as word2vec).
 
 Thus the learnt $A$ gives a way to induce embeddings for new words from a few or even a single occurrence. We call this the   *à la carte* embedding of $w$,  because we don't need to pay  the *prix fixe* of re-running GloVe or word2vec on the entire corpus each time a new word is needed. 
 
