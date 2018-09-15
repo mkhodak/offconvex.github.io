@@ -6,13 +6,9 @@ author:     Sanjeev Arora, Mikhail Khodak, Nikunj Saunshi
 visible:    False
 ---
 
-Recall that distributional methods for capturing meaning, such as word embeddings, almost by definition require observing many examples of words in context.
-On the other hand, people can induce a reasonable meaning for a concept from a single, sufficiently informative sentence, such as the first line of a [Wikipedia entry](https://en.wikipedia.org/wiki/Syzygy_(astronomy)): "a *syzygy* is a straight line configuration of three or more celestial bodies in a gravitational system."
-How can a learning algorithm induce reasonable representations of word meaning from a few or even a single occurence? The NLP community has various testbeds to test such algorithms. 
+Distributional methods for capturing meaning, such as word embeddings, often require observing many examples of words in context. But most humans can infer a reasonable meaning from very few or even a single occurence. For instance, that a Porgy is probably a fish if we read "Porgies live in shallow temperate marine waters." There is great interest in developing this capability in NLP algorithms. 
 
-In this blog we describe a simple, principled, but effective method for inducing embeddings of rare words from just a few examples in context.
-This *à la carte* approach, described in our [ACL'18 paper](http://aclweb.org/anthology/P18-1002) with Yingyu Liang, Tengyu Ma, and Brandon Stewart, easily extends to learning embeddings of arbitrary language features such as word-senses and n-grams. 
-Combining these with our recent [deep-learning-free text embeddings](http://www.offconvex.org/2018/06/25/textembeddings/) leads to state-of-the-art results on several document classification tasks as well.
+Here we describe a simple, principled, but effective method, the *à la carte* approach, described in our [ACL'18 paper](http://aclweb.org/anthology/P18-1002) with Yingyu Liang, Tengyu Ma, and Brandon Stewart. It also easily extends to learning embeddings of arbitrary language features such as word-senses and n-grams. The paper also combines these with our recent [deep-learning-free text embeddings](http://www.offconvex.org/2018/06/25/textembeddings/) to get simple deep-learning free text embeddings with almost state of the art performance on downstream classification tasks. (See also a previous [blog post](http://www.offconvex.org/2018/06/25/textembeddings/).)
 
 ## Relating word embeddings and their contexts
 
