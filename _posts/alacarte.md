@@ -18,7 +18,7 @@ Suppose a single occurence of a word $w$ is surrounded by a sequence $c$ of word
 
 Unfortunately, this totally fails. Even taking thousands of occurences of $w$, the average of such estimates  stays far from the ground truth embedding $v_w$. The following discovery should therefore be surprising. (Read below for a theoretical justification):
 
-> [TACL'18 paper]() There is a single matrix $A$ (depending only upon the text corpus)  such that $A u_c$ is a good estimate for $v_w$. Note that the best such  $A$ can be found via linear regression by minimizing the average $|Au_c -v_w|_2^2 $ over occurences for frequent words, for which we already have word embeddings.  
+> [TACL'18 paper]() There is a single matrix $A$ (depending only upon the text corpus)  such that for all words, $A u_c$ is a good estimate for $v_w$. Note that the best such  $A$ can be found via linear regression by minimizing the average $|Au_c -v_w|_2^2 $ over occurences for frequent words, for which we already have word embeddings.  
 
 Once such an $A$ has been learnt from frequent words, the induction of embeddings for new words works very well. As we receive more and more occurences of  $w$ the average of $Au_c$ over all sentences containing $w$  has cosine similarity $>0.9$ with the true word embedding $v_w$. (This holds for GloVe as well as word2vec.)
 
