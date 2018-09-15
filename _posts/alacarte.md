@@ -14,7 +14,7 @@ Here we describe a simple but principled approach called *à la carte* embedding
 
 Suppose a single occurence of a word $w$ is surrounded by a sequence $c$ of words. What is a reasonable guess for the word embedding $v_w$  of $w$? For convenience, we will let $u_c$ denote the  average of the word embeddings of words in $c$.
 
-> **Guess 1:** The famous word2vec method suggests that $u_c$ is (up to scaling) a good estimate for $v_w$.
+> **Guess 1:** Up to scaling, $u_c$ is  a good estimate for $v_w$ (as suggested by the word2vec method). 
 
 Unfortunately, this totally fails. Even taking thousands of occurences of $w$, the average of such estimates  stays far from the ground truth embedding $v_w$. The following is a surprising new discovery (A theoretical justification appears later):
 
