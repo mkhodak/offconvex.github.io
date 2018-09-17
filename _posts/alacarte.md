@@ -6,23 +6,23 @@ author:     Sanjeev Arora, Mikhail Khodak, Nikunj Saunshi
 visible:    False
 ---
 
-Distributional methods for capturing meaning, such as word embeddings, often require observing many examples of words in context. But most humans can infer a reasonable meaning from very few or even a single occurence. For instance,  if we read "Porgies live in shallow temperate marine waters," we have a good idea that a *porgy* is a fish. Since language corpora often have a long tail of "rare words," it is an interesting problem to imbue NLP algorithms with this capability.  
+Distributional methods for capturing meaning, such as word embeddings, often require observing many examples of words in context. But most humans can infer a reasonable meaning from very few or even a single occurrence. For instance,  if we read "Porgies live in shallow temperate marine waters," we have a good idea that a *porgy* is a fish. Since language corpora often have a long tail of "rare words," it is an interesting problem to imbue NLP algorithms with this capability.  
 
 Here we describe a simple but principled approach called *à la carte* embeddings, described in our [ACL'18 paper](http://aclweb.org/anthology/P18-1002) with Yingyu Liang, Tengyu Ma, and Brandon Stewart. It also easily extends to learning embeddings of arbitrary language features such as word-senses and $n$-grams. The paper also combines these with our recent [deep-learning-free text embeddings](http://www.offconvex.org/2018/06/25/textembeddings/) to get simple deep-learning free text embeddings with even better performance on downstream classification tasks, quite competitive with deep learning approaches.
 
 ## Inducing word embedding from their contexts: a surprising linear relationship
 
-Suppose a single occurence of a word $w$ is surrounded by a sequence $c$ of words. What is a reasonable guess for the word embedding $v_w$  of $w$? For convenience, we will let $u_w^c$ denote the  average of the word embeddings of words in $c$. Anybody who knows the word2vec method may reasonably guess the following.
+Suppose a single occurrence of a word $w$ is surrounded by a sequence $c$ of words. What is a reasonable guess for the word embedding $v_w$  of $w$? For convenience, we will let $u_w^c$ denote the  average of the word embeddings of words in $c$. Anybody who knows the word2vec method may reasonably guess the following.
 
-> **Guess 1:** Up to scaling, $u_w^c$ is  a good estimate for $v_w$.
+> **Guess 1:** Up to scaling, $u_w^c$ is a good estimate for $v_w$.
 
-Unfortunately, this totally fails. Even taking thousands of occurences of $w$, the average of such estimates  stays far from the ground truth embedding $v_w$. The following discovery should therefore be surprising (read below for a theoretical justification):
+Unfortunately, this totally fails. Even taking thousands of occurrences of $w$, the average of such estimates stays far from the ground truth embedding $v_w$. The following discovery should therefore be surprising (read below for a theoretical justification):
 
-> [**Theorem 1**](https://transacl.org/ojs/index.php/tacl/article/view/1346): There is a single matrix $A$ (depending only upon the text corpus)  such that $A u_w^c$ is a good estimate for $v_w$. Note that the best such  $A$ can be found via linear regression by minimizing the average $|Au_w^c -v_w|_2^2 $ over occurrences of frequent words $w$, for which we already have word embeddings.  
+> [**Theorem 1**](https://transacl.org/ojs/index.php/tacl/article/view/1346): There is a single matrix $A$ (depending only upon the text corpus) such that $A u_w^c$ is a good estimate for $v_w$. Note that the best such $A$ can be found via linear regression by minimizing the average $|Au_w^c -v_w|_2^2 $ over occurrences of frequent words $w$, for which we already have word embeddings.  
 
-Once such an $A$ has been learnt from frequent words, the induction of embeddings for new words works very well. As we receive more and more occurences of  $w$ the average of $Au_w^c$ over all sentences containing $w$  has cosine similarity $>0.9$ with the true word embedding $v_w$ (this holds for GloVe as well as word2vec).
+Once such an $A$ has been learnt from frequent words, the induction of embeddings for new words works very well. As we receive more and more occurrences of $w$ the average of $Au_w^c$ over all sentences containing $w$ has cosine similarity $>0.9$ with the true word embedding $v_w$ (this holds for GloVe as well as word2vec).
 
-Thus the learnt $A$ gives a way to induce embeddings for new words from a few or even a single occurrence. We call this the   *à la carte* embedding of $w$,  because we don't need to pay  the *prix fixe* of re-running GloVe or word2vec on the entire corpus each time a new word is needed. 
+Thus the learnt $A$ gives a way to induce embeddings for new words from a few or even a single occurrence. We call this the   *à la carte* embedding of $w$,  because we don't need to pay the *prix fixe* of re-running GloVe or word2vec on the entire corpus each time a new word is needed. 
 
 ### Testing embeddings for rare words ###
 Using Stanford's [Rare Words](https://nlp.stanford.edu/~lmthang/morphoNLM/) dataset we created the 
@@ -46,8 +46,7 @@ Note that the vocabulary size exceeds 200K, so the true vector being among the c
 ##  A theory of induced embeddings for general features
 
 Why should the matrix $A$ mentioned above exist in the first place? 
-Sanjeev, Yingyu, and Tengyu's [TACL'18](https://transacl.org/ojs/index.php/tacl/article/view/1346) paper together with Yuanzhi Li and Andrej Risteski gives a justification via
-a latent-variable model of corpus generation that is a modification of their earlier model described in [TACL'16](https://transacl.org/ojs/index.php/tacl/article/view/742) (see also this [blog post](http://www.offconvex.org/2016/02/14/word-embeddings-2/)) The basic idea is to consider a random walk over an ellipsoid instead of the unit square. 
+Sanjeev, Yingyu, and Tengyu's [TACL'18](https://transacl.org/ojs/index.php/tacl/article/view/1346) paper together with Yuanzhi Li and Andrej Risteski gives a justification via a latent-variable model of corpus generation that is a modification of their earlier model described in [TACL'16](https://transacl.org/ojs/index.php/tacl/article/view/742) (see also this [blog post](http://www.offconvex.org/2016/02/14/word-embeddings-2/)) The basic idea is to consider a random walk over an ellipsoid instead of the unit square. 
 Under this modification of the rand-walk model, whose approximate MLE objective is similar to that of GloVe, their first theorem shows the following:
 
 $$ \exists~A\in\mathbb{R}^{d\times d}\textrm{ s.t. }v_w=A\mathbb{E} \left[\frac{1}{n}\sum\limits_{w'\in c}v_{w'}\bigg|w\in c\right]=A\mathbb{E}v_w^\textrm{avg}~\forall~w $$
@@ -86,6 +85,6 @@ Using this simple approach we can match the performance of other linear and LSTM
 
 Our *à la carte* method is simple, almost elementary, and yet gives results competitive with many other feature embedding methods and also beats them in many cases.
 Can one do zero-shot learning of word embeddings, i.e. inducing embeddings for a words/features without any context?
-Character level methods such as [fastText](https://fasttext.cc/) can do this and it is a good problem to  incorporate character level information into the *à la carte* approach (the few things we tried didn't work so far).
+Character level methods such as [fastText](https://fasttext.cc/) can do this and it is a good problem to incorporate character level information into the *à la carte* approach (the few things we tried didn't work so far).
 
 The *à la carte* code is [available here](https://github.com/NLPrinceton/ALaCarte), allowing you to re-create the results described.
