@@ -29,7 +29,7 @@ Using Stanford's [Rare Words](https://nlp.stanford.edu/~lmthang/morphoNLM/) data
 [*Contextual Rare Words*](http://nlp.cs.princeton.edu/CRW/) dataset where, along with word pairs and human-rated scores, we also provide contexts (i.e., few usages) for the rare words.
 
 We compare the performance of our method with alternatives such as [top singular component removal and frequency down-weighting](http://www.offconvex.org/2018/06/17/textembeddings/) and find that *à la carte* embedding consistently outperforms other methods and requires far fewer contexts to match their best performance.
-Below we plot the increase in Spearman correlation with human ratings as the tested algorithms are given more samples of the words in context. We see that given only 8 occurences of the word, the a la carte method outperforms the other baselines even if they have 100+ occurences. 
+Below we plot the increase in Spearman correlation with human ratings as the tested algorithms are given more samples of the words in context. We see that given only 8 occurences of the word, the *a la carte* method outperforms  other baselines that're given 128 occurences. 
 
 <p style="text-align:center;">
 <img src="/assets/crwplot.svg" width="40%" />
