@@ -36,8 +36,8 @@ Below we plot the increase in Spearman correlation with human ratings as the tes
 </p>
 
 Now we turn to the task mentioned in the opening para of this post. [Herbelot and Baroni](http://aclweb.org/anthology/D17-1030) constructed a "nonce" dataset consisting of single-word concepts and their Wikipedia definitions, to test algorithms that "simulate the process by which a competent speaker encounters a new word in known contexts." They tested various methods, including a modified version of word2vec.
-As we show in the table below, *à la carte* embedding outperforms all their methods in terms of the average rank of the target vector's similarity with the constructed vector.
-Note that the vocabulary size exceeds 200K, so the true vector being among the closest 200 or so vectors is quite good.
+As we show in the table below, *à la carte* embedding outperforms all their methods in terms of the average rank of the target vector's similarity with the constructed vector. The true word embedding is among the closest 165 or so word vectors to our embedding. 
+(Note that the vocabulary size exceeds 200K, so this is considered a strong performance.) 
 
 <p style="text-align:center;">
 <img src="/assets/nonce.svg" width="40%" />
